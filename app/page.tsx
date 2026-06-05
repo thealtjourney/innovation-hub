@@ -31,6 +31,19 @@ const inProgress: App[] = [
 
 const discovery: App[] = [
   {
+    name: "Skill Exchange",
+    tagline: "Community skills exchange platform",
+    description:
+      "A peer-to-peer platform for residents and colleagues to share practical skills — from DIY and gardening to digital literacy and CV writing — building stronger communities around the homes we look after.",
+    href: "https://skillexchange-ochre.vercel.app/",
+    external: true,
+    status: "Beta",
+    tags: ["Community", "Resident voice", "Social value"],
+    accent: "from-rose-50 to-white",
+    iconPath:
+      "M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm10 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM4 21v-1a4 4 0 0 1 4-4h3M20 3v1a4 4 0 0 1-4 4h-3",
+  },
+  {
     name: "Fuel-Poverty Intelligence",
     tagline: "Linking IoT signals with arrears data",
     description:
