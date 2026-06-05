@@ -1,12 +1,55 @@
 import Link from "next/link";
+import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
 
-const apps = [
+type App = {
+  name: string;
+  tagline: string;
+  description: string;
+  href: string;
+  external: boolean;
+  status: "Live" | "Beta" | "Prototype" | "Concept";
+  tags: string[];
+  accent: string;
+  iconPath: string;
+};
+
+const inProgress: App[] = [
+  {
+    name: "ArchAngel IoT",
+    tagline: "Sensor-led home monitoring",
+    description:
+      "A property-level IoT platform monitoring temperature, humidity and air quality across the stock — surfacing damp and mould risk before it becomes a complaint, and giving asset teams a real-time picture of how homes are performing.",
+    href: "/apps/archangel-iot",
+    external: false,
+    status: "Prototype",
+    tags: ["IoT", "Damp & mould", "Resident safety"],
+    accent: "from-violet-50 to-white",
+    iconPath:
+      "M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0M12 12v9M9 21h6",
+  },
+];
+
+const discovery: App[] = [
+  {
+    name: "Fuel-Poverty Intelligence",
+    tagline: "Linking IoT signals with arrears data",
+    description:
+      "A concept for an early-warning view of fuel poverty — combining live IoT readings (under-heating, high humidity, cold-spell behaviour) with rent and utility arrears patterns to identify residents at risk before crisis, and target support where it lands hardest.",
+    href: "/apps/fuel-poverty",
+    external: false,
+    status: "Concept",
+    tags: ["Data fusion", "Resident wellbeing", "Early intervention"],
+    accent: "from-amber-50 to-white",
+    iconPath:
+      "M12 2s5 5.5 5 10a5 5 0 0 1-10 0c0-1.7.8-3.4 1.8-4.7M12 14a2 2 0 0 0 2-2",
+  },
   {
     name: "Charity Days",
     tagline: "Volunteer day coordination platform",
     description:
       "A streamlined portal for colleagues to find, book and track volunteering days with partner charities — turning paid charity time into measurable community impact.",
     href: "https://mhgcharitydays.vercel.app/",
+    external: true,
     status: "Live",
     tags: ["Workforce", "ESG", "Internal tools"],
     accent: "from-emerald-50 to-white",
@@ -19,6 +62,7 @@ const apps = [
     description:
       "A geospatial digital twin of the housing portfolio — visualising stock condition, energy performance and investment scenarios to support better strategic decisions.",
     href: "https://shdt.vercel.app/",
+    external: true,
     status: "Beta",
     tags: ["Digital twin", "Asset management", "Net zero"],
     accent: "from-blue-50 to-white",
@@ -42,42 +86,85 @@ const pillars = [
   },
 ];
 
+function statusDot(status: App["status"]) {
+  switch (status) {
+    case "Live":
+      return "bg-accent-500";
+    case "Beta":
+      return "bg-amber-500";
+    case "Prototype":
+      return "bg-violet-500";
+    case "Concept":
+    default:
+      return "bg-ink-300";
+  }
+}
+
+function AppCard({ app }: { app: App }) {
+  const host = app.external ? new URL(app.href).host : "Read the brief";
+  const cta = app.external ? "Open app" : "Read more";
+
+  const inner = (
+    <>
+      <div className="flex items-start justify-between">
+        <div className="grid h-11 w-11 place-items-center rounded-xl bg-white text-ink-900 shadow-ring">
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d={app.iconPath} />
+          </svg>
+        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-ink-700 ring-1 ring-ink-900/5">
+          <span className={`h-1.5 w-1.5 rounded-full ${statusDot(app.status)}`} />
+          {app.status}
+        </span>
+      </div>
+
+      <h3 className="mt-6 text-xl font-semibold tracking-tight text-ink-900">
+        {app.name}
+      </h3>
+      <p className="mt-1 text-sm font-medium text-ink-500">{app.tagline}</p>
+      <p className="mt-4 text-sm leading-relaxed text-ink-700">
+        {app.description}
+      </p>
+
+      <div className="mt-6 flex flex-wrap gap-1.5">
+        {app.tags.map((t) => (
+          <span key={t} className="rounded-full bg-white/70 px-2.5 py-1 text-xs font-medium text-ink-500 ring-1 ring-ink-900/5">
+            {t}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-7 flex items-center justify-between">
+        <span className="truncate text-xs text-ink-500">{host}</span>
+        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-900">
+          {cta}
+          <svg className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </span>
+      </div>
+    </>
+  );
+
+  const className = `group relative flex flex-col overflow-hidden rounded-2xl border border-ink-900/10 bg-gradient-to-br ${app.accent} p-7 shadow-soft transition hover:-translate-y-0.5 hover:border-ink-900/20 hover:shadow-lg`;
+
+  return app.external ? (
+    <a href={app.href} target="_blank" rel="noreferrer" className={className}>
+      {inner}
+    </a>
+  ) : (
+    <Link href={app.href} className={className}>
+      {inner}
+    </Link>
+  );
+}
+
 export default function Page() {
   return (
     <main className="relative min-h-screen">
-      {/* Decorative grid */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[640px] grid-bg" />
 
-      {/* Header */}
-      <header className="relative z-10">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-ink-900 text-white">
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 12 12 3l9 9" />
-                <path d="M5 10v10h14V10" />
-              </svg>
-            </span>
-            <span className="text-[15px] font-semibold tracking-tight">
-              Innovation Hub
-            </span>
-          </Link>
-          <nav className="hidden items-center gap-8 text-sm text-ink-500 md:flex">
-            <a href="#portfolio" className="hover:text-ink-900">Portfolio</a>
-            <a href="#approach" className="hover:text-ink-900">Approach</a>
-            <a href="#contact" className="hover:text-ink-900">Contact</a>
-          </nav>
-          <a
-            href="#portfolio"
-            className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-4 py-2 text-sm font-medium text-white shadow-soft transition hover:bg-ink-700"
-          >
-            Explore portfolio
-            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </a>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Hero */}
       <section className="relative z-10">
@@ -96,7 +183,7 @@ export default function Page() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
-              href="#portfolio"
+              href="#in-progress"
               className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-5 py-2.5 text-sm font-medium text-white shadow-soft transition hover:bg-ink-700"
             >
               View the portfolio
@@ -112,11 +199,10 @@ export default function Page() {
             </a>
           </div>
 
-          {/* Stats strip */}
           <dl className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-ink-900/10 bg-ink-900/10 shadow-soft sm:grid-cols-4">
             {[
-              { k: "2", v: "Live products" },
-              { k: "100%", v: "Web-native" },
+              { k: `${inProgress.length}`, v: "In progress" },
+              { k: `${discovery.length}`, v: "In discovery" },
               { k: "Open", v: "Source ethos" },
               { k: "Cloud", v: "First infrastructure" },
             ].map((s) => (
@@ -129,93 +215,80 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Portfolio */}
-      <section id="portfolio" className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+      {/* In Progress */}
+      <section id="in-progress" className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
-                Portfolio
+                In progress
               </p>
               <h2 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 md:text-4xl">
-                Applications in production
+                Applications being built and operated.
               </h2>
             </div>
             <p className="max-w-md text-sm text-ink-500">
-              Each product is built and operated in the open. Click through to
-              the live application.
+              Products that are live, in beta or actively in prototype with
+              colleagues and residents.
             </p>
           </div>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {apps.map((app) => (
-              <a
-                key={app.name}
-                href={app.href}
-                target="_blank"
-                rel="noreferrer"
-                className={`group relative flex flex-col overflow-hidden rounded-2xl border border-ink-900/10 bg-gradient-to-br ${app.accent} p-7 shadow-soft transition hover:-translate-y-0.5 hover:border-ink-900/20 hover:shadow-lg`}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-white text-ink-900 shadow-ring">
-                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d={app.iconPath} />
-                    </svg>
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-2.5 py-1 text-xs font-medium text-ink-700 ring-1 ring-ink-900/5">
-                    <span className={`h-1.5 w-1.5 rounded-full ${app.status === "Live" ? "bg-accent-500" : "bg-amber-500"}`} />
-                    {app.status}
-                  </span>
-                </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {inProgress.map((app) => (
+              <AppCard key={app.name} app={app} />
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <h3 className="mt-6 text-xl font-semibold tracking-tight text-ink-900">
-                  {app.name}
-                </h3>
-                <p className="mt-1 text-sm font-medium text-ink-500">
-                  {app.tagline}
-                </p>
-                <p className="mt-4 text-sm leading-relaxed text-ink-700">
-                  {app.description}
-                </p>
+      {/* Discovery */}
+      <section id="discovery" className="relative z-10 border-t border-ink-900/5">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+                Discovery
+              </p>
+              <h2 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 md:text-4xl">
+                Ideas being explored.
+              </h2>
+            </div>
+            <p className="max-w-md text-sm text-ink-500">
+              Concepts and hypotheses we&apos;re framing before any build —
+              testing whether the problem is worth solving and what the right
+              shape of solution looks like.
+            </p>
+          </div>
 
-                <div className="mt-6 flex flex-wrap gap-1.5">
-                  {app.tags.map((t) => (
-                    <span key={t} className="rounded-full bg-white/70 px-2.5 py-1 text-xs font-medium text-ink-500 ring-1 ring-ink-900/5">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-7 flex items-center justify-between">
-                  <span className="truncate text-xs text-ink-500">
-                    {new URL(app.href).host}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-900">
-                    Open app
-                    <svg className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14M13 6l6 6-6 6" />
-                    </svg>
-                  </span>
-                </div>
-              </a>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {discovery.map((app) => (
+              <AppCard key={app.name} app={app} />
             ))}
 
-            {/* Coming soon placeholder */}
-            <div className="relative flex flex-col items-start justify-center rounded-2xl border border-dashed border-ink-900/15 bg-white/50 p-7 text-ink-500 md:col-span-2">
+            <div className="relative flex flex-col items-start justify-center rounded-2xl border border-dashed border-ink-900/15 bg-white/50 p-7 text-ink-500">
               <span className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-300">
-                In the pipeline
+                Add your idea
               </span>
               <p className="mt-2 max-w-xl text-sm">
-                New experiments are added as they reach prototype stage. If you
-                have an idea worth exploring, get in touch.
+                Got a problem worth exploring? Discovery work starts with a
+                short hypothesis and a route to validation.
               </p>
+              <a
+                href="#contact"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink-900"
+              >
+                Get in touch
+                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
       {/* Approach */}
-      <section id="approach" className="relative z-10">
+      <section id="approach" className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             Approach
@@ -251,7 +324,7 @@ export default function Page() {
 
       {/* CTA */}
       <section id="contact" className="relative z-10">
-        <div className="mx-auto max-w-6xl px-6 pb-24">
+        <div className="mx-auto max-w-6xl px-6 pb-24 pt-20">
           <div className="overflow-hidden rounded-3xl bg-ink-900 p-10 text-white shadow-soft md:p-14">
             <div className="grid items-center gap-8 md:grid-cols-[1.6fr_1fr]">
               <div>
@@ -283,25 +356,7 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-ink-900/5">
-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-6 py-8 text-sm text-ink-500 md:flex-row md:items-center">
-          <div className="flex items-center gap-2">
-            <span className="grid h-6 w-6 place-items-center rounded-md bg-ink-900 text-white">
-              <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 12 12 3l9 9" />
-                <path d="M5 10v10h14V10" />
-              </svg>
-            </span>
-            <span>Innovation Hub · {new Date().getFullYear()}</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <a href="#portfolio" className="hover:text-ink-900">Portfolio</a>
-            <a href="#approach" className="hover:text-ink-900">Approach</a>
-            <a href="#contact" className="hover:text-ink-900">Contact</a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
