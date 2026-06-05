@@ -31,6 +31,19 @@ const inProgress: App[] = [
 
 const discovery: App[] = [
   {
+    name: "Pooled",
+    tagline: "Collective purchasing for residents",
+    description:
+      "A service helping residents pool their buying power to access better deals on everyday services — from energy and broadband to insurance and home essentials — turning individual households into a stronger collective customer.",
+    href: "https://pooled-mocha.vercel.app/",
+    external: true,
+    status: "Beta",
+    tags: ["Collective buying", "Resident value", "Cost of living"],
+    accent: "from-teal-50 to-white",
+    iconPath:
+      "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 2a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1M16 21v-1a4 4 0 0 0-2-3.46",
+  },
+  {
     name: "Skill Exchange",
     tagline: "Community skills exchange platform",
     description:
