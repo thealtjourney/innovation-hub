@@ -31,6 +31,19 @@ const inProgress: App[] = [
 
 const discovery: App[] = [
   {
+    name: "Repairs Portal",
+    tagline: "Resident repairs, joined up with the asset system",
+    description:
+      "A modern repairs reporting portal for residents and colleagues — built to integrate deeply with the asset management system so jobs are diagnosed, routed and prioritised against live property data, not raised in isolation.",
+    href: "https://repairs-orcin.vercel.app/",
+    external: true,
+    status: "Beta",
+    tags: ["Repairs", "Asset integration", "Resident experience"],
+    accent: "from-indigo-50 to-white",
+    iconPath:
+      "M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4l-2.8 2.8-2.8-2.8 2.8-2.8Z",
+  },
+  {
     name: "Pooled",
     tagline: "Collective purchasing for residents",
     description:
