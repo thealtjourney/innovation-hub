@@ -31,6 +31,32 @@ const inProgress: App[] = [
 
 const discovery: App[] = [
   {
+    name: "The Reading Room",
+    tagline: "Colleague & resident book club",
+    description:
+      "A lightweight book-club platform — picking reads together, tracking progress, and giving colleagues and residents a regular, low-pressure way to connect across teams, schemes and lived experience.",
+    href: "/book-club.html",
+    external: true,
+    status: "Prototype",
+    tags: ["Community", "Wellbeing", "Culture"],
+    accent: "from-cyan-50 to-white",
+    iconPath:
+      "M3 5a2 2 0 0 1 2-2h5v16H5a2 2 0 0 1-2-2V5Zm11-2h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5V3Z",
+  },
+  {
+    name: "Social Value Tool",
+    tagline: "HACT-based supplier scoring & tracking",
+    description:
+      "Score suppliers on the resident outcomes they deliver — then track committed versus delivered through the year with evidence attached. Ranks suppliers by social value, and shows who is actually following through on their promises.",
+    href: "/social-value.html",
+    external: true,
+    status: "Prototype",
+    tags: ["Procurement", "HACT", "Supplier accountability"],
+    accent: "from-lime-50 to-white",
+    iconPath:
+      "M3 21h18M5 21V10m4 11V6m4 15v-9m4 9V3m4 18v-7",
+  },
+  {
     name: "Repairs Portal",
     tagline: "Resident repairs, joined up with the asset system",
     description:
@@ -140,7 +166,11 @@ function statusDot(status: App["status"]) {
 }
 
 function AppCard({ app }: { app: App }) {
-  const host = app.external ? new URL(app.href).host : "Read the brief";
+  const host = app.external
+    ? app.href.startsWith("http")
+      ? new URL(app.href).host
+      : "Open tool"
+    : "Read the brief";
   const cta = app.external ? "Open app" : "Read more";
 
   const inner = (

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Reading Room</title>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface-2: #f1f3f6;
+    --border: #e3e7ee;
+    --text: #1c2430;
+    --text-soft: #5b6675;
+    --text-faint: #8a93a3;
+    --accent: #3a6df0;
+    --accent-soft: #eaf0ff;
+    --accent-deep: #244bb8;
+    --green: #1f9d6b;
+    --green-soft: #e6f6ef;
+    --amber: #c8881a;
+    --amber-soft: #fbf1dd;
+    --red: #d8483f;
+    --shadow: 0 1px 2px rgba(20,30,50,.06), 0 6px 20px rgba(20,30,50,.06);
+    --shadow-sm: 0 1px 2px rgba(20,30,50,.07);
+    --radius: 14px;
+    --radius-sm: 9px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  /* ---------- Layout ---------- */
+  .app { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 248px; flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    display: flex; flex-direction: column;
+    position: sticky; top: 0; height: 100vh;
+  }
+  .brand { display: flex; align-items: center; gap: 11px; padding: 4px 8px 22px; }
+  .brand .mark {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), #6a93ff);
+    display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 17px;
+    box-shadow: 0 4px 10px rgba(58,109,240,.35);
+  }
+  .brand h1 { font-size: 15.5px; margin: 0; letter-spacing: -.2px; }
+  .brand p { font-size: 11.5px; margin: 0; color: var(--text-faint); }
+  nav { display: flex; flex-direction: column; gap: 3px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 500; color: var(--text-soft);
+    cursor: pointer; border: none; background: none; text-align: left; width: 100%;
+    transition: background .12s, color .12s;
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--text); }
+  .nav-item.active { background: var(--accent-soft); color: var(--accent-deep); font-weight: 600; }
+  .nav-item .ico { width: 18px; text-align: center; font-size: 16px; }
+  .sidebar-foot { margin-top: auto; padding: 12px 8px 0; border-top: 1px solid var(--border); }
+  .who { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .who .avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 12px; color: #fff; }
+  .who select { border: none; background: none; font: inherit; font-weight: 600; color: var(--text); cursor: pointer; padding: 2px; }
+  .main { flex: 1; min-width: 0; padding: 30px 40px 60px; max-width: 1080px; }
+  .page-head { margin-bottom: 24px; }
+  .page-head h2 { margin: 0 0 4px; font-size: 24px; letter-spacing: -.4px; }
+  .page-head p { margin: 0; color: var(--text-soft); font-size: 14px; }
+
+  /* ---------- Generic ---------- */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  }
+  .btn {
+    font: inherit; font-weight: 600; font-size: 13.5px;
+    border-radius: var(--radius-sm); padding: 9px 16px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    transition: background .12s, border-color .12s, transform .04s; display: inline-flex; align-items: center; gap: 7px;
+  }
+  .btn:hover { background: var(--surface-2); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: var(--accent-deep); }
+  .btn.ghost { border-color: transparent; background: transparent; color: var(--text-soft); }
+  .btn.ghost:hover { background: var(--surface-2); }
+  .btn.sm { padding: 6px 11px; font-size: 12.5px; }
+  input, textarea, select {
+    font: inherit; font-size: 14px; color: var(--text);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 9px 12px; background: var(--surface); width: 100%; outline: none;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  label { font-size: 12.5px; font-weight: 600; color: var(--text-soft); display: block; margin-bottom: 6px; }
+  .field { margin-bottom: 14px; }
+  .row { display: flex; gap: 12px; }
+  .row > * { flex: 1; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600;
+    padding: 3px 9px; border-radius: 100px; background: var(--surface-2); color: var(--text-soft);
+  }
+  .badge.green { background: var(--green-soft); color: var(--green); }
+  .badge.amber { background: var(--amber-soft); color: var(--amber); }
+  .badge.accent { background: var(--accent-soft); color: var(--accent-deep); }
+  .muted { color: var(--text-faint); }
+  .empty { text-align: center; padding: 48px 20px; color: var(--text-faint); }
+  .empty .big { font-size: 30px; margin-bottom: 8px; }
+  .hidden { display: none !important; }
+
+  /* ---------- Modal ---------- */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(20,28,42,.42);
+    display: grid; place-items: center; padding: 20px; z-index: 50;
+    backdrop-filter: blur(2px);
+  }
+  .modal {
+    background: var(--surface); border-radius: 16px; width: 100%; max-width: 520px;
+    box-shadow: 0 20px 60px rgba(15,25,45,.3); max-height: 90vh; overflow-y: auto;
+  }
+  .modal-head { padding: 20px 24px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .modal-head h3 { margin: 0; font-size: 18px; }
+  .modal-body { padding: 18px 24px 24px; }
+  .modal-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+  .x { border: none; background: none; font-size: 22px; line-height: 1; cursor: pointer; color: var(--text-faint); padding: 0; }
+
+  /* ---------- Dashboard ---------- */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat { padding: 18px; }
+  .stat .n { font-size: 26px; font-weight: 700; letter-spacing: -.5px; }
+  .stat .l { font-size: 12.5px; color: var(--text-soft); margin-top: 2px; }
+  .stat .ico { font-size: 19px; margin-bottom: 8px; opacity: .85; }
+  .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: start; }
+  .section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text-faint); margin: 0 0 12px; }
+
+  /* current book hero */
+  .hero { display: flex; gap: 20px; padding: 22px; }
+  .cover {
+    width: 96px; height: 142px; border-radius: 8px; flex-shrink: 0;
+    display: grid; place-items: center; text-align: center; padding: 10px;
+    color: #fff; font-weight: 700; font-size: 13px; line-height: 1.25;
+    box-shadow: 0 8px 20px rgba(20,30,50,.18); position: relative; overflow: hidden;
+  }
+  .cover.lg { width: 120px; height: 178px; font-size: 15px; }
+  .cover.sm { width: 50px; height: 74px; font-size: 9.5px; padding: 6px; border-radius: 5px; box-shadow: 0 3px 8px rgba(20,30,50,.18); }
+  .progress-track { height: 8px; background: var(--surface-2); border-radius: 100px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #6a93ff); border-radius: 100px; transition: width .4s; }
+
+  /* ---------- Book grid ---------- */
+  .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .book-card { padding: 16px; display: flex; gap: 14px; align-items: flex-start; transition: box-shadow .15s, transform .1s; cursor: pointer; }
+  .book-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .book-card h4 { margin: 0 0 2px; font-size: 14.5px; letter-spacing: -.1px; }
+  .book-card .auth { font-size: 12.5px; color: var(--text-soft); margin-bottom: 8px; }
+  .vote-btn {
+    display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border);
+    background: var(--surface); border-radius: 100px; padding: 5px 12px; cursor: pointer;
+    font-weight: 700; font-size: 13px; color: var(--text-soft); transition: all .12s;
+  }
+  .vote-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .vote-btn.voted { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* ---------- Discussion ---------- */
+  .thread { padding: 18px 20px; }
+  .thread + .thread { margin-top: 14px; }
+  .post-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 12.5px; color: #fff; flex-shrink: 0; }
+  .avatar.sm { width: 26px; height: 26px; font-size: 11px; }
+  .post-meta { font-size: 12.5px; color: var(--text-faint); }
+  .post-meta b { color: var(--text); font-weight: 600; font-size: 13.5px; }
+  .reply { display: flex; gap: 10px; padding: 12px 0 0; margin-left: 8px; border-top: 1px dashed var(--border); margin-top: 12px; }
+  .reply-body { font-size: 13.5px; }
+  .like { cursor: pointer; color: var(--text-faint); font-size: 12.5px; font-weight: 600; user-select: none; }
+  .like:hover, .like.on { color: var(--red); }
+
+  /* notes / quotes */
+  .quote { padding: 18px 20px; border-left: 3px solid var(--accent); }
+  .quote .q { font-size: 15px; font-style: italic; line-height: 1.55; }
+  .quote .src { font-size: 12.5px; color: var(--text-faint); margin-top: 8px; }
+
+  /* schedule timeline */
+  .milestone { display: flex; gap: 14px; padding: 14px 0; }
+  .milestone:not(:last-child) { border-bottom: 1px solid var(--border); }
+  .ms-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; border: 2px solid var(--border); background: var(--surface); }
+  .ms-dot.done { background: var(--green); border-color: var(--green); }
+  .ms-dot.current { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .ms-body { flex: 1; }
+  .ms-body h4 { margin: 0; font-size: 14px; }
+  .ms-body .when { font-size: 12.5px; color: var(--text-faint); }
+
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: #fff; padding: 11px 20px; border-radius: 100px;
+    font-size: 13.5px; font-weight: 500; opacity: 0; pointer-events: none; transition: all .25s; z-index: 80;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .seg { display: inline-flex; background: var(--surface-2); border-radius: 100px; padding: 3px; gap: 2px; }
+  .seg button { border: none; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--text-soft); padding: 6px 14px; border-radius: 100px; cursor: pointer; }
+  .seg button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+
+  @media (max-width: 880px) {
+    .sidebar { width: 70px; padding: 20px 10px; }
+    .brand h1, .brand p, .nav-item span:not(.ico), .sidebar-foot .who-text { display: none; }
+    .nav-item { justify-content: center; }
+    .two-col { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .main { padding: 24px 20px 50px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="mark">R</div>
+      <div>
+        <h1>The Reading Room</h1>
+        <p>Our shared shelf</p>
+      </div>
+    </div>
+    <nav id="nav">
+      <button class="nav-item active" data-view="dashboard"><span class="ico">◧</span><span>Dashboard</span></button>
+      <button class="nav-item" data-view="schedule"><span class="ico">◷</span><span>Reading Schedule</span></button>
+      <button class="nav-item" data-view="catalog"><span class="ico">▦</span><span>Catalog &amp; Voting</span></button>
+      <button class="nav-item" data-view="discussion"><span class="ico">❝</span><span>Discussion</span></button>
+      <button class="nav-item" data-view="notes"><span class="ico">✎</span><span>Notes &amp; Quotes</span></button>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="who">
+        <div class="avatar" id="meAvatar">—</div>
+        <div class="who-text">
+          <div style="font-size:11px;color:var(--text-faint)">Signed in as</div>
+          <select id="meSelect"></select>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="main"></main>
+</div>
+
+<div id="modalRoot"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   The Reading Room — single-file book club app
+   Data persists in this browser via localStorage.
+============================================================ */
+const STORE_KEY = "reading_room_v1";
+const AVATAR_COLORS = ["#3a6df0","#1f9d6b","#c8881a","#d8483f","#8b5cf6","#0ea5b7","#e0568b","#5a6b7a"];
+
+function uid(){ return Math.random().toString(36).slice(2,9); }
+function colorFor(name){ let h=0; for(const c of name) h=(h*31+c.charCodeAt(0))>>>0; return AVATAR_COLORS[h%AVATAR_COLORS.length]; }
+function initials(name){ return name.split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase(); }
+function fmtDate(iso){ if(!iso) return ""; const d=new Date(iso+(iso.length<=10?"T00:00:00":"")); return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }
+function fmtShort(iso){ const d=new Date(iso); const diff=(Date.now()-d.getTime())/1000; if(diff<60) return "just now"; if(diff<3600) return Math.floor(diff/60)+"m ago"; if(diff<86400) return Math.floor(diff/3600)+"h ago"; if(diff<604800) return Math.floor(diff/86400)+"d ago"; return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); }
+function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ---------- Seed data ---------- */
+function seed(){
+  const members = ["Maya Chen","Devin Park","Aisha Rahman","Tom Becker","Priya Nair","Jordan Ellis"];
+  const coverGrad = i => {
+    const g=[["#3a6df0","#6a93ff"],["#1f9d6b","#56c79a"],["#c8881a","#e6b450"],["#8b5cf6","#b794f6"],["#d8483f","#f08a82"],["#0ea5b7","#4fd1c5"]];
+    return g[i%g.length];
+  };
+  const now = Date.now();
+  const day = 86400000;
+  const books = [
+    { id:uid(), title:"The Midnight Library", author:"Matt Haig", note:"A novel about second chances and the lives we don't live.", proposedBy:"Maya Chen", votes:["Maya Chen","Tom Becker","Priya Nair"], status:"shortlist", grad:coverGrad(0) },
+    { id:uid(), title:"Atomic Habits", author:"James Clear", note:"Small habits, remarkable results. Practical and snappy.", proposedBy:"Devin Park", votes:["Devin Park","Jordan Ellis"], status:"shortlist", grad:coverGrad(2) },
+    { id:uid(), title:"Klara and the Sun", author:"Kazuo Ishiguro", note:"Told from the perspective of an artificial friend.", proposedBy:"Aisha Rahman", votes:["Aisha Rahman","Maya Chen","Devin Park","Priya Nair"], status:"shortlist", grad:coverGrad(3) },
+    { id:uid(), title:"Project Hail Mary", author:"Andy Weir", note:"A lone astronaut, an impossible problem, a lot of science.", proposedBy:"Tom Becker", votes:["Tom Becker"], status:"shortlist", grad:coverGrad(1) },
+  ];
+  const current = { id:uid(), title:"Tomorrow, and Tomorrow, and Tomorrow", author:"Gabrielle Zevin", grad:coverGrad(4),
+    pages:416, startedISO:new Date(now-18*day).toISOString().slice(0,10) };
+  const milestones = [
+    { id:uid(), label:"Part I — Sick Kids (ch. 1–4)", dateISO:new Date(now-12*day).toISOString().slice(0,10), done:true },
+    { id:uid(), label:"Part II–III (ch. 5–7)", dateISO:new Date(now-4*day).toISOString().slice(0,10), done:true },
+    { id:uid(), label:"Part IV–V (ch. 8–9)", dateISO:new Date(now+3*day).toISOString().slice(0,10), done:false },
+    { id:uid(), label:"Finish + discussion meetup", dateISO:new Date(now+10*day).toISOString().slice(0,10), done:false },
+  ];
+  const progress = {}; members.forEach((m,i)=> progress[m] = [42,78,15,60,30,90][i] );
+  const threads = [
+    { id:uid(), author:"Priya Nair", at:new Date(now-2*day).toISOString(),
+      body:"The dual timeline in the middle really got me. Did anyone else have to flip back to keep the years straight? Worth it though.",
+      likes:["Maya Chen","Devin Park"],
+      replies:[
+        { id:uid(), author:"Tom Becker", at:new Date(now-2*day+3600000).toISOString(), body:"Totally. I started keeping a little note of which game maps to which year." , likes:["Priya Nair"]},
+        { id:uid(), author:"Maya Chen", at:new Date(now-1*day).toISOString(), body:"Same — and somehow it made the payoff in Part IV hit harder.", likes:[] },
+      ]},
+    { id:uid(), author:"Jordan Ellis", at:new Date(now-1*day).toISOString(),
+      body:"No spoilers past chapter 8 please 🙏 I'm a little behind but catching up this weekend.",
+      likes:["Aisha Rahman","Tom Becker","Devin Park"], replies:[] },
+  ];
+  const notes = [
+    { id:uid(), author:"Aisha Rahman", at:new Date(now-3*day).toISOString(), text:"There is a time for any fortune... a phrase the book keeps circling back to. Quietly devastating.", page:"p. 213", kind:"quote" },
+    { id:uid(), author:"Devin Park", at:new Date(now-1*day).toISOString(), text:"Theme to watch: collaboration vs. credit. Who gets remembered for the work? Good one for our next chat.", page:"", kind:"note" },
+  ];
+  return { members, me: members[0], books, current, milestones, progress, threads, notes,
+    meetings:[{ id:uid(), title:"Mid-book check-in", dateISO:new Date(now+3*day).toISOString().slice(0,10), where:"Conf Room B / Zoom" },
+              { id:uid(), title:"Wrap-up discussion", dateISO:new Date(now+10*day).toISOString().slice(0,10), where:"Conf Room B / Zoom" }] };
+}
+
+/* ---------- State ---------- */
+let S = load();
+function load(){ try{ const r=localStorage.getItem(STORE_KEY); if(r) return JSON.parse(r);}catch(e){} const s=seed(); localStorage.setItem(STORE_KEY, JSON.stringify(s)); return s; }
+function save(){ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }
+function me(){ return S.me; }
+
+/* ---------- Toast ---------- */
+let toastT;
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2200); }
+
+/* ---------- Modal ---------- */
+function openModal(title, bodyHTML, onMount){
+  const root=document.getElementById("modalRoot");
+  root.innerHTML = `<div class="overlay" id="ov">
+    <div class="modal">
+      <div class="modal-head"><h3>${esc(title)}</h3><button class="x" id="mx">×</button></div>
+      <div class="modal-body">${bodyHTML}</div>
+    </div></div>`;
+  const close=()=>{ root.innerHTML=""; };
+  document.getElementById("mx").onclick=close;
+  document.getElementById("ov").onclick=e=>{ if(e.target.id==="ov") close(); };
+  if(onMount) onMount(close);
+  return close;
+}
+
+/* ---------- Avatar helper ---------- */
+function avatar(name, cls=""){ return `<div class="avatar ${cls}" style="background:${colorFor(name)}">${initials(name)}</div>`; }
+function cover(b, cls=""){ const g=b.grad||["#3a6df0","#6a93ff"]; return `<div class="cover ${cls}" style="background:linear-gradient(150deg,${g[0]},${g[1]})">${esc(b.title)}</div>`; }
+
+/* ============================================================
+   VIEWS
+============================================================ */
+let currentView = "dashboard";
+
+function render(){
+  document.querySelectorAll(".nav-item").forEach(n=> n.classList.toggle("active", n.dataset.view===currentView));
+  const m=document.getElementById("main");
+  m.innerHTML = ({
+    dashboard: viewDashboard, schedule: viewSchedule, catalog: viewCatalog,
+    discussion: viewDiscussion, notes: viewNotes
+  }[currentView])();
+  wire();
+  m.scrollTop=0; window.scrollTo(0,0);
+}
+
+/* ---- Dashboard ---- */
+function avgProgress(){ const v=Object.values(S.progress); return v.length? Math.round(v.reduce((a,b)=>a+b,0)/v.length):0; }
+function nextMeeting(){ const up=[...S.meetings].filter(x=>new Date(x.dateISO)>=new Date(Date.now()-86400000)).sort((a,b)=>a.dateISO.localeCompare(b.dateISO)); return up[0]; }
+
+function viewDashboard(){
+  const b=S.current, avg=avgProgress(), nm=nextMeeting();
+  const totalVotes = S.books.reduce((a,x)=>a+x.votes.length,0);
+  const replies = S.threads.reduce((a,t)=>a+t.replies.length,0)+S.threads.length;
+  const ranked = [...S.books].sort((a,b)=>b.votes.length-a.votes.length).slice(0,3);
+  return `
+  <div class="page-head"><h2>Welcome back, ${esc(me().split(" ")[0])}</h2><p>Here's where the club stands today.</p></div>
+  <div class="stat-grid">
+    <div class="card stat"><div class="ico">📖</div><div class="n">${avg}%</div><div class="l">Avg. reading progress</div></div>
+    <div class="card stat"><div class="ico">👥</div><div class="n">${S.members.length}</div><div class="l">Members</div></div>
+    <div class="card stat"><div class="ico">🗳️</div><div class="n">${totalVotes}</div><div class="l">Votes on next pick</div></div>
+    <div class="card stat"><div class="ico">💬</div><div class="n">${replies}</div><div class="l">Discussion posts</div></div>
+  </div>
+  <div class="two-col">
+    <div>
+      <p class="section-title">Currently Reading</p>
+      <div class="card hero">
+        ${cover(b,"lg")}
+        <div style="flex:1">
+          <h3 style="margin:0 0 2px;font-size:19px;letter-spacing:-.3px">${esc(b.title)}</h3>
+          <div style="color:var(--text-soft);margin-bottom:14px">by ${esc(b.author)}</div>
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px">
+            <span class="muted">Your progress</span><b>${S.progress[me()]||0}%</b>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:${S.progress[me()]||0}%"></div></div>
+          <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn primary sm" data-go="schedule">Update progress</button>
+            <button class="btn sm" data-go="discussion">Join discussion</button>
+          </div>
+        </div>
+      </div>
+      <p class="section-title" style="margin-top:24px">Latest from the group</p>
+      <div class="card" style="padding:6px 18px">
+        ${S.threads.slice(0,2).map(t=>`
+          <div style="padding:14px 0;${''}border-bottom:1px solid var(--border)">
+            <div class="post-head" style="margin-bottom:4px">${avatar(t.author,"sm")}<div class="post-meta"><b>${esc(t.author)}</b> · ${fmtShort(t.at)}</div></div>
+            <div style="font-size:13.5px;color:var(--text-soft)">${esc(t.body).slice(0,130)}${t.body.length>130?"…":""}</div>
+          </div>`).join("")}
+        <div style="padding:12px 0"><button class="btn ghost sm" data-go="discussion">See all discussion →</button></div>
+      </div>
+    </div>
+    <div>
+      <p class="section-title">Next Meeting</p>
+      <div class="card" style="padding:18px">
+        ${nm? `<div style="font-size:15px;font-weight:600">${esc(nm.title)}</div>
+          <div style="color:var(--text-soft);font-size:13.5px;margin-top:6px">📅 ${fmtDate(nm.dateISO)}</div>
+          <div style="color:var(--text-soft);font-size:13.5px;margin-top:3px">📍 ${esc(nm.where)}</div>`
+          : `<div class="muted">No meeting scheduled.</div>`}
+      </div>
+      <p class="section-title" style="margin-top:24px">Top of the shortlist</p>
+      <div class="card" style="padding:8px 16px">
+        ${ranked.map((x,i)=>`
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 0;${i<ranked.length-1?'border-bottom:1px solid var(--border)':''}">
+            ${cover(x,"sm")}
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(x.title)}</div>
+              <div class="muted" style="font-size:12px">${esc(x.author)}</div>
+            </div>
+            <span class="badge accent">${x.votes.length} ▲</span>
+          </div>`).join("")}
+        <div style="padding:11px 0"><button class="btn ghost sm" data-go="catalog">Go vote →</button></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---- Schedule ---- */
+function viewSchedule(){
+  const b=S.current;
+  const sorted=[...S.milestones].sort((a,b)=>a.dateISO.localeCompare(b.dateISO));
+  const todayIdx = sorted.findIndex(m=>!m.done);
+  const memberRows = S.members.map(mn=>{
+    const p=S.progress[mn]||0;
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 0;${''}">
+      ${avatar(mn,"sm")}
+      <div style="width:120px;font-size:13.5px;font-weight:${mn===me()?600:500}">${esc(mn)}${mn===me()?' <span class="muted" style="font-weight:400">(you)</span>':''}</div>
+      <div style="flex:1" class="progress-track"><div class="progress-fill" style="width:${p}%"></div></div>
+      <div style="width:40px;text-align:right;font-size:13px;font-weight:600">${p}%</div>
+    </div>`;
+  }).join("");
+  return `
+  <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-end">
+    <div><h2>Reading Schedule</h2><p>Milestones, meetings, and how everyone's tracking.</p></div>
+    <button class="btn" id="editCurrent">Edit current book</button>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="card hero" style="margin-bottom:20px">
+        ${cover(b,"lg")}
+        <div style="flex:1">
+          <span class="badge green" style="margin-bottom:8px">● Now reading</span>
+          <h3 style="margin:6px 0 2px;font-size:19px">${esc(b.title)}</h3>
+          <div style="color:var(--text-soft)">by ${esc(b.author)}</div>
+          <div style="margin-top:14px;font-size:12.5px;display:flex;justify-content:space-between"><span class="muted">Your progress</span><b>${S.progress[me()]||0}%</b></div>
+          <div class="progress-track" style="margin-top:6px"><div class="progress-fill" style="width:${S.progress[me()]||0}%"></div></div>
+          <button class="btn primary sm" id="myProgressBtn" style="margin-top:14px">Update my progress</button>
+        </div>
+      </div>
+      <p class="section-title">Milestones</p>
+      <div class="card" style="padding:6px 20px 14px">
+        ${sorted.map((ms,i)=>`
+          <div class="milestone">
+            <div class="ms-dot ${ms.done?'done':(i===todayIdx?'current':'')}"></div>
+            <div class="ms-body">
+              <h4>${esc(ms.label)}</h4>
+              <div class="when">${fmtDate(ms.dateISO)} ${ms.done?'· <span style="color:var(--green);font-weight:600">done</span>':(i===todayIdx?'· <span style="color:var(--accent);font-weight:600">up next</span>':'')}</div>
+            </div>
+            <button class="btn ghost sm" data-toggle-ms="${ms.id}">${ms.done?'Undo':'Mark done'}</button>
+          </div>`).join("")}
+        <button class="btn sm" id="addMs" style="margin-top:12px">+ Add milestone</button>
+      </div>
+    </div>
+    <div>
+      <p class="section-title">Group progress</p>
+      <div class="card" style="padding:8px 18px 14px">${memberRows}</div>
+      <p class="section-title" style="margin-top:24px">Meetings</p>
+      <div class="card" style="padding:8px 18px 14px">
+        ${S.meetings.sort((a,b)=>a.dateISO.localeCompare(b.dateISO)).map((mt,i)=>`
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;${i<S.meetings.length-1?'border-bottom:1px solid var(--border)':''}">
+            <div style="text-align:center;width:46px;flex-shrink:0">
+              <div style="font-size:11px;text-transform:uppercase;color:var(--text-faint);font-weight:600">${new Date(mt.dateISO+'T00:00:00').toLocaleDateString(undefined,{month:'short'})}</div>
+              <div style="font-size:20px;font-weight:700;line-height:1">${new Date(mt.dateISO+'T00:00:00').getDate()}</div>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:600">${esc(mt.title)}</div>
+              <div class="muted" style="font-size:12.5px">${esc(mt.where)}</div>
+            </div>
+            <button class="btn ghost sm" data-del-meet="${mt.id}">✕</button>
+          </div>`).join("") || '<div class="muted" style="padding:14px 0">No meetings yet.</div>'}
+        <button class="btn sm" id="addMeet" style="margin-top:10px">+ Schedule meeting</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---- Catalog & Voting ---- */
+function viewCatalog(){
+  const ranked=[...S.books].sort((a,b)=>b.votes.length-a.votes.length);
+  return `
+  <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-end">
+    <div><h2>Catalog &amp; Voting</h2><p>Propose what we should read next — top votes win.</p></div>
+    <button class="btn primary" id="proposeBtn">+ Propose a book</button>
+  </div>
+  <div class="book-grid">
+    ${ranked.map(b=>{
+      const voted=b.votes.includes(me());
+      return `<div class="card book-card" data-book="${b.id}">
+        ${cover(b)}
+        <div style="flex:1;min-width:0">
+          <h4>${esc(b.title)}</h4>
+          <div class="auth">${esc(b.author)}</div>
+          <div style="font-size:12.5px;color:var(--text-soft);margin-bottom:12px;min-height:34px">${esc(b.note||"")}</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button class="vote-btn ${voted?'voted':''}" data-vote="${b.id}">▲ ${b.votes.length}</button>
+            <span class="muted" style="font-size:11.5px">by ${esc(b.proposedBy)}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join("")}
+  </div>`;
+}
+
+/* ---- Discussion ---- */
+function viewDiscussion(){
+  return `
+  <div class="page-head"><h2>Discussion</h2><p>Talk about <b>${esc(S.current.title)}</b> — be mindful of spoilers.</p></div>
+  <div class="card" style="padding:16px 18px;margin-bottom:20px">
+    <div style="display:flex;gap:12px">
+      ${avatar(me())}
+      <div style="flex:1">
+        <textarea id="newPost" rows="2" placeholder="Share a thought, a question, a favorite moment…"></textarea>
+        <div style="margin-top:10px;text-align:right"><button class="btn primary sm" id="postBtn">Post</button></div>
+      </div>
+    </div>
+  </div>
+  ${S.threads.slice().sort((a,b)=>b.at.localeCompare(a.at)).map(renderThread).join("") || '<div class="empty"><div class="big">💬</div>No posts yet — start the conversation.</div>'}`;
+}
+function renderThread(t){
+  const liked=t.likes.includes(me());
+  return `<div class="card thread">
+    <div class="post-head">${avatar(t.author)}<div class="post-meta"><b>${esc(t.author)}</b><br>${fmtShort(t.at)}</div></div>
+    <div style="font-size:14.5px;margin:2px 0 10px">${esc(t.body)}</div>
+    <div style="display:flex;gap:18px;align-items:center">
+      <span class="like ${liked?'on':''}" data-like="${t.id}">${liked?'♥':'♡'} ${t.likes.length||''}</span>
+      <span class="like" data-replytoggle="${t.id}" style="color:var(--text-faint)">💬 Reply</span>
+    </div>
+    ${t.replies.map(r=>`
+      <div class="reply">${avatar(r.author,"sm")}
+        <div style="flex:1">
+          <div class="post-meta"><b style="font-size:13px">${esc(r.author)}</b> · ${fmtShort(r.at)}</div>
+          <div class="reply-body">${esc(r.body)}</div>
+          <span class="like ${r.likes.includes(me())?'on':''}" data-likereply="${t.id}:${r.id}" style="font-size:11.5px;margin-top:3px;display:inline-block">${r.likes.includes(me())?'♥':'♡'} ${r.likes.length||''}</span>
+        </div>
+      </div>`).join("")}
+    <div class="reply hidden" data-replybox="${t.id}">
+      ${avatar(me(),"sm")}
+      <div style="flex:1">
+        <textarea rows="1" placeholder="Write a reply…" data-replyinput="${t.id}"></textarea>
+        <div style="margin-top:8px"><button class="btn primary sm" data-sendreply="${t.id}">Reply</button></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---- Notes & Quotes ---- */
+function viewNotes(){
+  return `
+  <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-end">
+    <div><h2>Notes &amp; Quotes</h2><p>A shared commonplace book for passages worth keeping.</p></div>
+    <button class="btn primary" id="addNote">+ Add note or quote</button>
+  </div>
+  <div style="columns:2;column-gap:18px">
+    ${S.notes.slice().sort((a,b)=>b.at.localeCompare(a.at)).map(n=>`
+      <div class="card ${n.kind==='quote'?'quote':''}" style="padding:18px 20px;margin-bottom:18px;break-inside:avoid;${n.kind!=='quote'?'border-left:3px solid var(--green)':''}">
+        <span class="badge ${n.kind==='quote'?'accent':'green'}" style="margin-bottom:10px">${n.kind==='quote'?'❝ Quote':'✎ Note'}</span>
+        <div class="${n.kind==='quote'?'q':''}" style="${n.kind==='quote'?'':'font-size:14px'}">${n.kind==='quote'?'“'+esc(n.text)+'”':esc(n.text)}</div>
+        <div class="src">— ${esc(n.author)}${n.page?' · '+esc(n.page):''} · ${fmtShort(n.at)}
+          <button class="btn ghost sm" data-del-note="${n.id}" style="float:right;padding:2px 8px">✕</button>
+        </div>
+      </div>`).join("") || '<div class="empty"><div class="big">✎</div>No notes yet.</div>'}
+  </div>`;
+}
+
+/* ============================================================
+   WIRING / EVENTS
+============================================================ */
+function wire(){
+  document.querySelectorAll("[data-go]").forEach(el=> el.onclick=()=>{ currentView=el.dataset.go; render(); });
+
+  if(currentView==="catalog"){
+    const pb=document.getElementById("proposeBtn"); if(pb) pb.onclick=proposeBook;
+    document.querySelectorAll("[data-vote]").forEach(el=> el.onclick=e=>{ e.stopPropagation(); toggleVote(el.dataset.vote); });
+    document.querySelectorAll("[data-book]").forEach(el=> el.onclick=()=> bookDetail(el.dataset.book));
+  }
+  if(currentView==="schedule"){
+    const mp=document.getElementById("myProgressBtn"); if(mp) mp.onclick=updateProgress;
+    const ec=document.getElementById("editCurrent"); if(ec) ec.onclick=editCurrentBook;
+    const am=document.getElementById("addMs"); if(am) am.onclick=addMilestone;
+    const ae=document.getElementById("addMeet"); if(ae) ae.onclick=addMeeting;
+    document.querySelectorAll("[data-toggle-ms]").forEach(el=> el.onclick=()=>toggleMilestone(el.dataset.toggleMs));
+    document.querySelectorAll("[data-del-meet]").forEach(el=> el.onclick=()=>{ S.meetings=S.meetings.filter(m=>m.id!==el.dataset.delMeet); save(); render(); });
+  }
+  if(currentView==="discussion"){
+    const pb=document.getElementById("postBtn"); if(pb) pb.onclick=addPost;
+    document.querySelectorAll("[data-like]").forEach(el=> el.onclick=()=>likeThread(el.dataset.like));
+    document.querySelectorAll("[data-likereply]").forEach(el=> el.onclick=()=>likeReply(el.dataset.likereply));
+    document.querySelectorAll("[data-replytoggle]").forEach(el=> el.onclick=()=>{ const box=document.querySelector(`[data-replybox="${el.dataset.replytoggle}"]`); box.classList.toggle("hidden"); });
+    document.querySelectorAll("[data-sendreply]").forEach(el=> el.onclick=()=>sendReply(el.dataset.sendreply));
+  }
+  if(currentView==="notes"){
+    const an=document.getElementById("addNote"); if(an) an.onclick=addNote;
+    document.querySelectorAll("[data-del-note]").forEach(el=> el.onclick=()=>{ S.notes=S.notes.filter(n=>n.id!==el.dataset.delNote); save(); render(); toast("Note removed"); });
+  }
+}
+
+/* ----- Catalog actions ----- */
+function toggleVote(id){
+  const b=S.books.find(x=>x.id===id); if(!b) return;
+  const i=b.votes.indexOf(me());
+  if(i>=0){ b.votes.splice(i,1); } else { b.votes.push(me()); }
+  save(); render(); toast(i>=0?"Vote removed":"Voted ✓");
+}
+function proposeBook(){
+  openModal("Propose a book", `
+    <div class="field"><label>Title</label><input id="f_title" placeholder="e.g. The Midnight Library"></div>
+    <div class="field"><label>Author</label><input id="f_author" placeholder="Author name"></div>
+    <div class="field"><label>Why this one? <span class="muted">(optional)</span></label><textarea id="f_note" rows="3" placeholder="A sentence on what makes it worth reading"></textarea></div>
+    <div class="modal-foot"><button class="btn" id="f_cancel">Cancel</button><button class="btn primary" id="f_save">Add to shortlist</button></div>
+  `, close=>{
+    document.getElementById("f_cancel").onclick=close;
+    document.getElementById("f_save").onclick=()=>{
+      const t=document.getElementById("f_title").value.trim();
+      const a=document.getElementById("f_author").value.trim();
+      if(!t){ toast("Add a title first"); return; }
+      const grads=[["#3a6df0","#6a93ff"],["#1f9d6b","#56c79a"],["#c8881a","#e6b450"],["#8b5cf6","#b794f6"],["#d8483f","#f08a82"],["#0ea5b7","#4fd1c5"]];
+      S.books.push({ id:uid(), title:t, author:a||"Unknown", note:document.getElementById("f_note").value.trim(), proposedBy:me(), votes:[me()], status:"shortlist", grad:grads[Math.floor(Math.random()*grads.length)] });
+      save(); close(); render(); toast("Added to the shortlist");
+    };
+  });
+}
+function bookDetail(id){
+  const b=S.books.find(x=>x.id===id); if(!b) return;
+  const voters=b.votes.map(v=>`<span class="badge" style="margin:2px 4px 2px 0">${esc(v)}</span>`).join("")||'<span class="muted">No votes yet</span>';
+  openModal(b.title, `
+    <div style="display:flex;gap:16px;margin-bottom:8px">${cover(b)}
+      <div><div style="color:var(--text-soft);margin-bottom:8px">by ${esc(b.author)}</div>
+      <div style="font-size:13.5px">${esc(b.note||"No description.")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">Proposed by ${esc(b.proposedBy)}</div></div>
+    </div>
+    <p class="section-title" style="margin-top:14px">Votes (${b.votes.length})</p>
+    <div>${voters}</div>
+    <div class="modal-foot">
+      <button class="btn" id="d_promote">⭐ Set as current read</button>
+      <button class="btn primary" id="d_vote">${b.votes.includes(me())?'Remove my vote':'Vote for this'}</button>
+    </div>
+  `, close=>{
+    document.getElementById("d_vote").onclick=()=>{ toggleVote(id); close(); };
+    document.getElementById("d_promote").onclick=()=>{
+      S.current={ id:uid(), title:b.title, author:b.author, grad:b.grad, pages:0, startedISO:new Date().toISOString().slice(0,10) };
+      S.progress={}; S.members.forEach(m=>S.progress[m]=0);
+      S.milestones=[]; S.books=S.books.filter(x=>x.id!==id);
+      save(); close(); currentView="schedule"; render(); toast("Now reading: "+b.title);
+    };
+  });
+}
+
+/* ----- Schedule actions ----- */
+function updateProgress(){
+  const cur=S.progress[me()]||0;
+  openModal("Update my progress", `
+    <label>How far through <b>${esc(S.current.title)}</b> are you?</label>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:14px">
+      <input type="range" id="rng" min="0" max="100" value="${cur}" style="flex:1;padding:0">
+      <div style="width:54px;text-align:right;font-size:20px;font-weight:700" id="rngVal">${cur}%</div>
+    </div>
+    <div class="modal-foot"><button class="btn" id="p_cancel">Cancel</button><button class="btn primary" id="p_save">Save</button></div>
+  `, close=>{
+    const rng=document.getElementById("rng"), val=document.getElementById("rngVal");
+    rng.oninput=()=> val.textContent=rng.value+"%";
+    document.getElementById("p_cancel").onclick=close;
+    document.getElementById("p_save").onclick=()=>{ S.progress[me()]=+rng.value; save(); close(); render(); toast("Progress updated"); };
+  });
+}
+function editCurrentBook(){
+  const b=S.current;
+  openModal("Edit current book", `
+    <div class="field"><label>Title</label><input id="e_title" value="${esc(b.title)}"></div>
+    <div class="field"><label>Author</label><input id="e_author" value="${esc(b.author)}"></div>
+    <div class="modal-foot"><button class="btn" id="e_cancel">Cancel</button><button class="btn primary" id="e_save">Save</button></div>
+  `, close=>{
+    document.getElementById("e_cancel").onclick=close;
+    document.getElementById("e_save").onclick=()=>{ b.title=document.getElementById("e_title").value.trim()||b.title; b.author=document.getElementById("e_author").value.trim()||b.author; save(); close(); render(); toast("Updated"); };
+  });
+}
+function addMilestone(){
+  openModal("Add milestone", `
+    <div class="field"><label>What to read</label><input id="m_label" placeholder="e.g. Chapters 10–12"></div>
+    <div class="field"><label>Target date</label><input type="date" id="m_date"></div>
+    <div class="modal-foot"><button class="btn" id="m_cancel">Cancel</button><button class="btn primary" id="m_save">Add</button></div>
+  `, close=>{
+    document.getElementById("m_cancel").onclick=close;
+    document.getElementById("m_save").onclick=()=>{
+      const l=document.getElementById("m_label").value.trim(), d=document.getElementById("m_date").value;
+      if(!l||!d){ toast("Add a label and date"); return; }
+      S.milestones.push({ id:uid(), label:l, dateISO:d, done:false }); save(); close(); render(); toast("Milestone added");
+    };
+  });
+}
+function toggleMilestone(id){ const m=S.milestones.find(x=>x.id===id); if(m){ m.done=!m.done; save(); render(); } }
+function addMeeting(){
+  openModal("Schedule meeting", `
+    <div class="field"><label>Title</label><input id="g_title" placeholder="e.g. Mid-book check-in"></div>
+    <div class="row"><div class="field"><label>Date</label><input type="date" id="g_date"></div>
+    <div class="field"><label>Where</label><input id="g_where" placeholder="Room / link"></div></div>
+    <div class="modal-foot"><button class="btn" id="g_cancel">Cancel</button><button class="btn primary" id="g_save">Add</button></div>
+  `, close=>{
+    document.getElementById("g_cancel").onclick=close;
+    document.getElementById("g_save").onclick=()=>{
+      const t=document.getElementById("g_title").value.trim(), d=document.getElementById("g_date").value;
+      if(!t||!d){ toast("Add a title and date"); return; }
+      S.meetings.push({ id:uid(), title:t, dateISO:d, where:document.getElementById("g_where").value.trim()||"TBD" }); save(); close(); render(); toast("Meeting scheduled");
+    };
+  });
+}
+
+/* ----- Discussion actions ----- */
+function addPost(){
+  const ta=document.getElementById("newPost"); const v=ta.value.trim(); if(!v){ toast("Write something first"); return; }
+  S.threads.push({ id:uid(), author:me(), at:new Date().toISOString(), body:v, likes:[], replies:[] });
+  save(); render(); toast("Posted");
+}
+function likeThread(id){ const t=S.threads.find(x=>x.id===id); if(!t) return; const i=t.likes.indexOf(me()); i>=0?t.likes.splice(i,1):t.likes.push(me()); save(); render(); }
+function likeReply(key){ const [tid,rid]=key.split(":"); const t=S.threads.find(x=>x.id===tid); const r=t&&t.replies.find(x=>x.id===rid); if(!r) return; const i=r.likes.indexOf(me()); i>=0?r.likes.splice(i,1):r.likes.push(me()); save(); render(); }
+function sendReply(id){
+  const inp=document.querySelector(`[data-replyinput="${id}"]`); const v=inp.value.trim(); if(!v){ toast("Write a reply first"); return; }
+  const t=S.threads.find(x=>x.id===id); t.replies.push({ id:uid(), author:me(), at:new Date().toISOString(), body:v, likes:[] });
+  save(); render(); toast("Reply added");
+}
+
+/* ----- Notes actions ----- */
+function addNote(){
+  openModal("Add note or quote", `
+    <div class="field"><label>Type</label>
+      <div class="seg" id="kindSeg" style="display:flex">
+        <button data-kind="quote" class="on">❝ Quote</button><button data-kind="note">✎ Note</button>
+      </div>
+    </div>
+    <div class="field"><label id="textLabel">Quote</label><textarea id="n_text" rows="3" placeholder="The passage or thought…"></textarea></div>
+    <div class="field"><label>Page / reference <span class="muted">(optional)</span></label><input id="n_page" placeholder="e.g. p. 142"></div>
+    <div class="modal-foot"><button class="btn" id="n_cancel">Cancel</button><button class="btn primary" id="n_save">Add</button></div>
+  `, close=>{
+    let kind="quote";
+    document.querySelectorAll("#kindSeg button").forEach(b=> b.onclick=()=>{ kind=b.dataset.kind; document.querySelectorAll("#kindSeg button").forEach(x=>x.classList.toggle("on",x===b)); document.getElementById("textLabel").textContent=kind==="quote"?"Quote":"Note"; });
+    document.getElementById("n_cancel").onclick=close;
+    document.getElementById("n_save").onclick=()=>{
+      const t=document.getElementById("n_text").value.trim(); if(!t){ toast("Add some text"); return; }
+      S.notes.push({ id:uid(), author:me(), at:new Date().toISOString(), text:t, page:document.getElementById("n_page").value.trim(), kind });
+      save(); close(); render(); toast("Saved");
+    };
+  });
+}
+
+/* ============================================================
+   BOOT
+============================================================ */
+function buildMemberPicker(){
+  const sel=document.getElementById("meSelect");
+  sel.innerHTML=S.members.map(m=>`<option ${m===S.me?'selected':''}>${esc(m)}</option>`).join("");
+  sel.onchange=()=>{ S.me=sel.value; save(); refreshMe(); render(); };
+}
+function refreshMe(){ const a=document.getElementById("meAvatar"); a.textContent=initials(me()); a.style.background=colorFor(me()); }
+document.querySelectorAll(".nav-item").forEach(n=> n.onclick=()=>{ currentView=n.dataset.view; render(); });
+buildMemberPicker(); refreshMe(); render();
+</script>
+</body>
+</html>
