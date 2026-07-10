@@ -31,6 +31,19 @@ const inProgress: App[] = [
 
 const discovery: App[] = [
   {
+    name: "Process Mapping Studio",
+    tagline: "Social housing process design & documentation",
+    description:
+      "A lightweight studio for mapping, documenting and iterating on social housing processes — giving teams a shared, visual source of truth for how work actually flows, from repairs and lettings to income and complaints.",
+    href: "https://bp-nu-wine.vercel.app/",
+    external: true,
+    status: "Beta",
+    tags: ["Process design", "Operational excellence", "Documentation"],
+    accent: "from-sky-50 to-white",
+    iconPath:
+      "M4 6h6v4H4V6Zm10 8h6v4h-6v-4Zm-4-4v4M7 10v4h7",
+  },
+  {
     name: "The Reading Room",
     tagline: "Colleague & resident book club",
     description:
