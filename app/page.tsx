@@ -31,6 +31,19 @@ const inProgress: App[] = [
 
 const discovery: App[] = [
   {
+    name: "Regulator Ratings",
+    tagline: "Social housing regulator judgements at a glance",
+    description:
+      "A clean, searchable view of Regulator of Social Housing gradings — surfacing consumer and governance/viability judgements across providers so teams can benchmark, spot trends and learn from peers under the new consumer regime.",
+    href: "https://rsh-xi.vercel.app/",
+    external: true,
+    status: "Beta",
+    tags: ["Regulation", "Benchmarking", "Consumer standards"],
+    accent: "from-fuchsia-50 to-white",
+    iconPath:
+      "M12 3 4 6v6c0 5 3.5 8.5 8 9 4.5-.5 8-4 8-9V6l-8-3Zm-3.5 9 2.5 2.5L16 10",
+  },
+  {
     name: "Process Mapping Studio",
     tagline: "Social housing process design & documentation",
     description:
