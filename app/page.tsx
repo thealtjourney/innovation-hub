@@ -13,22 +13,6 @@ type App = {
   iconPath: string;
 };
 
-const inProgress: App[] = [
-  {
-    name: "ArchAngel IoT",
-    tagline: "Sensor-led home monitoring",
-    description:
-      "A property-level IoT platform monitoring temperature, humidity and air quality across the stock — surfacing damp and mould risk before it becomes a complaint, and giving asset teams a real-time picture of how homes are performing.",
-    href: "/apps/archangel-iot",
-    external: false,
-    status: "Prototype",
-    tags: ["IoT", "Damp & mould", "Resident safety"],
-    accent: "from-violet-50 to-white",
-    iconPath:
-      "M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0M12 12v9M9 21h6",
-  },
-];
-
 const discovery: App[] = [
   {
     name: "Regulator Ratings",
@@ -278,7 +262,7 @@ export default function Page() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
-              href="#in-progress"
+              href="#discovery"
               className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-5 py-2.5 text-sm font-medium text-white shadow-soft transition hover:bg-ink-700"
             >
               View the portfolio
@@ -294,9 +278,8 @@ export default function Page() {
             </a>
           </div>
 
-          <dl className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-ink-900/10 bg-ink-900/10 shadow-soft sm:grid-cols-4">
+          <dl className="mt-16 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-ink-900/10 bg-ink-900/10 shadow-soft">
             {[
-              { k: `${inProgress.length}`, v: "In progress" },
               { k: `${discovery.length}`, v: "In discovery" },
               { k: "Open", v: "Source ethos" },
               { k: "Cloud", v: "First infrastructure" },
@@ -310,34 +293,8 @@ export default function Page() {
         </div>
       </section>
 
-      {/* In Progress */}
-      <section id="in-progress" className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
-                In progress
-              </p>
-              <h2 className="mt-2 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 md:text-4xl">
-                Applications being built and operated.
-              </h2>
-            </div>
-            <p className="max-w-md text-sm text-ink-500">
-              Products that are live, in beta or actively in prototype with
-              colleagues and residents.
-            </p>
-          </div>
-
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {inProgress.map((app) => (
-              <AppCard key={app.name} app={app} />
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Discovery */}
-      <section id="discovery" className="relative z-10 border-t border-ink-900/5">
+      <section id="discovery" className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -383,7 +340,7 @@ export default function Page() {
       </section>
 
       {/* Approach */}
-      <section id="approach" className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+      <section id="approach" className="relative z-10 border-t border-ink-900/5">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             Approach

@@ -16,13 +16,12 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm text-ink-500 md:flex">
-          <Link href="/#in-progress" className="hover:text-ink-900">In progress</Link>
           <Link href="/#discovery" className="hover:text-ink-900">Discovery</Link>
           <Link href="/#approach" className="hover:text-ink-900">Approach</Link>
           <Link href="/#contact" className="hover:text-ink-900">Contact</Link>
         </nav>
         <Link
-          href="/#in-progress"
+          href="/#discovery"
           className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-4 py-2 text-sm font-medium text-white shadow-soft transition hover:bg-ink-700"
         >
           Portfolio
@@ -49,7 +48,6 @@ export function SiteFooter() {
           <span>Innovation Hub · {new Date().getFullYear()}</span>
         </div>
         <div className="flex items-center gap-6">
-          <Link href="/#in-progress" className="hover:text-ink-900">In progress</Link>
           <Link href="/#discovery" className="hover:text-ink-900">Discovery</Link>
           <Link href="/#approach" className="hover:text-ink-900">Approach</Link>
           <Link href="/#contact" className="hover:text-ink-900">Contact</Link>
