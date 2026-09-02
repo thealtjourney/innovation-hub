@@ -15,6 +15,19 @@ type App = {
 
 const discovery: App[] = [
   {
+    name: "Housing Journey Manager",
+    tagline: "One shared map of every journey",
+    description:
+      "A full-stack journey map covering property, rented and shared ownership journeys — where every stage names an accountable team and answers four questions: what excellent service looks like, which processes it touches, which policies it sits under, and which TSMs it moves. An assurance layer, not a system of record.",
+    href: "/apps/journey-manager",
+    external: false,
+    status: "Prototype",
+    tags: ["Service design", "Assurance", "TSMs"],
+    accent: "from-orange-50 to-white",
+    iconPath:
+      "M9 20 3 22V8l6-2m0 14 6 2m-6-2V6m6 16 6-2V4l-6 2m0 14V6",
+  },
+  {
     name: "Threshold",
     tagline: "Tenancy sustainment early-warning model",
     description:
