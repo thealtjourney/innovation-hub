@@ -100,6 +100,63 @@ export default function Page() {
               why the shape is what it is.
             </p>
           </div>
+
+          {/* Journey map illustration */}
+          <figure className="mt-10 overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-soft">
+            <div className="flex items-center justify-between border-b border-ink-900/5 px-5 py-3 text-xs">
+              <span className="font-semibold uppercase tracking-wide text-ink-500">Journey map</span>
+              <span className="flex items-center gap-3 text-ink-500">
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" />On target</span>
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" />Watch</span>
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-red-500" />Below target</span>
+              </span>
+            </div>
+            <svg viewBox="0 0 900 320" className="w-full" role="img" aria-label="Illustration of three parallel journey tracks with stages and RAG statuses">
+              <defs>
+                <linearGradient id="jm-track" x1="0" x2="1">
+                  <stop offset="0%" stopColor="#F1F5F9" />
+                  <stop offset="100%" stopColor="#F8FAFC" />
+                </linearGradient>
+              </defs>
+              {/* Track labels */}
+              {[
+                { y: 60, label: "Property", sub: "acquisition → disposal" },
+                { y: 160, label: "Rented customer", sub: "application → moving on" },
+                { y: 260, label: "Shared ownership", sub: "reservation → resale" },
+              ].map((t) => (
+                <g key={t.label}>
+                  <text x="20" y={t.y - 4} fontSize="13" fontWeight="600" fill="#0B1220">{t.label}</text>
+                  <text x="20" y={t.y + 12} fontSize="11" fill="#94A3B8">{t.sub}</text>
+                </g>
+              ))}
+              {/* Tracks + stages */}
+              {[
+                { y: 60, stages: [{ n: "Acquire" }, { n: "Prep" }, { n: "Let-ready", rag: "amber" }, { n: "Occupied" }, { n: "Repairs", rag: "green" }, { n: "Planned" }, { n: "Void", rag: "red" }, { n: "Dispose" }] },
+                { y: 160, stages: [{ n: "Apply" }, { n: "Sign-up", rag: "green" }, { n: "Settle" }, { n: "Income", rag: "amber" }, { n: "ASB" }, { n: "Repairs" }, { n: "Complaints", rag: "red" }, { n: "Move on" }] },
+                { y: 260, stages: [{ n: "Reserve" }, { n: "Complete", rag: "green" }, { n: "Live-in" }, { n: "Repairs" }, { n: "Staircase", rag: "amber" }, { n: "Lease" }, { n: "Resale" }] },
+              ].map((track) => {
+                const startX = 190;
+                const endX = 870;
+                const gap = (endX - startX) / (track.stages.length - 1);
+                return (
+                  <g key={track.y}>
+                    <line x1={startX} y1={track.y} x2={endX} y2={track.y} stroke="#E2E8F0" strokeWidth="2" />
+                    {track.stages.map((s, i) => {
+                      const x = startX + gap * i;
+                      const rag = s.rag === "green" ? "#10B981" : s.rag === "amber" ? "#F59E0B" : s.rag === "red" ? "#EF4444" : null;
+                      return (
+                        <g key={s.n}>
+                          <circle cx={x} cy={track.y} r="10" fill="white" stroke="#CBD5E1" strokeWidth="1.5" />
+                          {rag && <circle cx={x} cy={track.y} r="5" fill={rag} />}
+                          <text x={x} y={track.y + 26} fontSize="11" fill="#475569" textAnchor="middle">{s.n}</text>
+                        </g>
+                      );
+                    })}
+                  </g>
+                );
+              })}
+            </svg>
+          </figure>
         </div>
       </section>
 
@@ -117,14 +174,83 @@ export default function Page() {
             for every stage and you have an assurance layer any team, exec or
             regulator can read.
           </p>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {questions.map((q) => (
-              <div key={q.n} className="rounded-2xl border border-ink-900/10 bg-white p-6 shadow-soft">
-                <span className="text-xs font-semibold text-ink-300">{q.n}</span>
-                <h3 className="mt-2 text-base font-semibold tracking-tight text-ink-900">{q.q}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-500">{q.b}</p>
+          <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
+            <div className="grid gap-6 sm:grid-cols-2">
+              {questions.map((q) => (
+                <div key={q.n} className="rounded-2xl border border-ink-900/10 bg-white p-6 shadow-soft">
+                  <span className="text-xs font-semibold text-ink-300">{q.n}</span>
+                  <h3 className="mt-2 text-base font-semibold tracking-tight text-ink-900">{q.q}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-500">{q.b}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Stage card illustration */}
+            <figure className="overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-soft">
+              <div className="flex items-center justify-between border-b border-ink-900/5 px-5 py-3 text-xs">
+                <span className="font-semibold uppercase tracking-wide text-ink-500">Stage · Sign-up</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-0.5 font-medium text-emerald-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />On target
+                </span>
               </div>
-            ))}
+              <div className="p-6">
+                <p className="text-xs font-semibold uppercase tracking-wide text-ink-300">Accountable team</p>
+                <p className="mt-1 text-sm text-ink-900">Lettings — Lettings Manager</p>
+
+                <div className="mt-5 rounded-xl bg-slate-50 p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-brand-600">01 · Excellent service</p>
+                  <p className="mt-1 text-sm leading-relaxed text-ink-700">
+                    A new tenant is signed up in a home that&apos;s ready to live in, understands their tenancy and knows who to call — in a single visit, within target.
+                  </p>
+                </div>
+
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-brand-600">02 · Processes</p>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {["Sign-up appointment", "Rent account setup", "Welcome pack"].map((t) => (
+                        <span key={t} className="rounded-full bg-white px-2.5 py-1 text-xs text-ink-700 ring-1 ring-ink-900/10">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-brand-600">03 · Policies</p>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {["Lettings policy", "Tenancy policy"].map((t) => (
+                        <span key={t} className="rounded-full bg-white px-2.5 py-1 text-xs text-ink-700 ring-1 ring-ink-900/10">{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-brand-600">04 · TSMs</p>
+                  <div className="mt-2 space-y-2">
+                    {[
+                      { code: "TP01", n: "Overall satisfaction", v: "82.4%", t: "80%", up: true },
+                      { code: "TP06", n: "Time taken to move in", v: "9.8 days", t: "10 days", up: true },
+                    ].map((m) => (
+                      <div key={m.code} className="flex items-center justify-between rounded-lg bg-white px-3 py-2 ring-1 ring-ink-900/10">
+                        <div className="min-w-0">
+                          <p className="truncate text-xs font-medium text-ink-900">
+                            <span className="text-ink-500">{m.code}</span> · {m.n}
+                          </p>
+                          <p className="text-[11px] text-ink-500">Target {m.t}</p>
+                        </div>
+                        <span className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700">
+                          {m.v}
+                          <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6 15l6-6 6 6" />
+                          </svg>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="mt-5 text-[11px] text-ink-300">Illustrative — figures shown are placeholder data.</p>
+              </div>
+            </figure>
           </div>
         </div>
       </section>
