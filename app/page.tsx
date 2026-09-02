@@ -15,6 +15,19 @@ type App = {
 
 const discovery: App[] = [
   {
+    name: "Threshold",
+    tagline: "Tenancy sustainment early-warning model",
+    description:
+      "An interpretable-by-construction early-warning view of households at risk of losing their tenancy — built from data housing providers already hold. The score is never the product; the explanation is, so a DPO can sign it off and an officer can argue with it.",
+    href: "/apps/threshold",
+    external: false,
+    status: "Prototype",
+    tags: ["Early warning", "Explainable model", "Tenancy sustainment"],
+    accent: "from-slate-50 to-white",
+    iconPath:
+      "M3 12h4l3-8 4 16 3-8h4",
+  },
+  {
     name: "Regulator Ratings",
     tagline: "Social housing regulator judgements at a glance",
     description:
