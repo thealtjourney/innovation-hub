@@ -15,6 +15,19 @@ type App = {
 
 const discovery: App[] = [
   {
+    name: "Housing Portal",
+    tagline: "Resident self-service portal",
+    description:
+      "A modern resident-facing portal — a single place to manage the tenancy, raise repairs, check rent and communications, and get things done without needing to call. Designed around the resident's journey rather than the org chart.",
+    href: "https://ssp-seven-mu.vercel.app/",
+    external: true,
+    status: "Beta",
+    tags: ["Resident experience", "Self-service", "Digital-first"],
+    accent: "from-yellow-50 to-white",
+    iconPath:
+      "M3 12 12 3l9 9M5 10v10h14V10M9 20v-6h6v6",
+  },
+  {
     name: "Housing Journey Manager",
     tagline: "One shared map of every journey",
     description:
