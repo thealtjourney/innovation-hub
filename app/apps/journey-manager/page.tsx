@@ -3,23 +3,41 @@ import type { Metadata } from "next";
 import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
-  title: "Housing Journey Manager — Innovation Hub",
+  title: "Housing Journeys — Innovation Hub",
   description:
-    "A full-stack journey map for a social housing provider — an overview and assurance layer showing how the service is meant to work, who owns it, and whether the measures are being hit.",
+    "A shared picture of the resident experience — three colour-coded journeys, 25 stages, and the excellence, processes, policies and Tenant Satisfaction Measures that sit behind each one.",
 };
 
 const journeys = [
   {
-    name: "Property",
-    body: "The asset's life — from acquisition and letting-ready through repairs, planned works and voids to disposal. Anchored in the property, not the tenancy.",
+    heading: "Our homes",
+    name: "Property journey",
+    body: "From the first plans to a home's next chapter — acquisition, letting-ready, occupied, planned works, voids and disposal, anchored in the asset.",
+    dot: "bg-blue-500",
+    ring: "ring-blue-100",
+    tint: "bg-blue-50/60",
+    stages: 6,
+    tsms: 11,
   },
   {
-    name: "Rented customer",
-    body: "The rented household's experience — from application and letting, through the tenancy, income management, ASB, complaints and moving on.",
+    heading: "Our residents",
+    name: "Rented customer journey",
+    body: "From finding a home to feeling at home — application, sign-up, settling in, income, ASB, repairs, complaints and moving on.",
+    dot: "bg-emerald-500",
+    ring: "ring-emerald-100",
+    tint: "bg-emerald-50/60",
+    stages: 10,
+    tsms: 16,
   },
   {
-    name: "Shared ownership",
-    body: "The shared owner's journey — from reservation and staircasing through repairs responsibilities, lease events and resale, kept distinct where the tenure demands it.",
+    heading: "Our homeowners",
+    name: "Shared ownership journey",
+    body: "From the first enquiry to the next step in ownership — reservation, completion, living in the home, lease events, staircasing and resale.",
+    dot: "bg-orange-500",
+    ring: "ring-orange-100",
+    tint: "bg-orange-50/60",
+    stages: 9,
+    tsms: 7,
   },
 ];
 
@@ -27,7 +45,7 @@ const questions = [
   { n: "01", q: "What does excellent service look like here?", b: "A stage's headline standard — the promise a resident or colleague should be able to expect at this point in the journey." },
   { n: "02", q: "Which processes does it touch?", b: "The workflows that deliver the standard — every process names its owning team, so 'who is involved here' stays true without being a second thing to maintain." },
   { n: "03", q: "Which policies does it relate to?", b: "The policy commitments a stage sits under — and readable in reverse: open a policy and see every stage where it bites." },
-  { n: "04", q: "Which Tenant Satisfaction Measures apply?", b: "The measures a stage moves, with current position, target and year-on-year change — shown in context, not in a separate dashboard." },
+  { n: "04", q: "Which Tenant Satisfaction Measures apply?", b: "The measures a stage influences, with current position, target and year-on-year change — shown in context, not in a separate dashboard." },
 ];
 
 const lenses = [
@@ -42,8 +60,15 @@ const lenses = [
 
 const isnts = [
   { t: "Not a system of record", b: "It holds no case data — no tenants, no repairs jobs, no ASB cases. Those live in the tools already built for them. This describes how the service is meant to work, not what happened to a particular household." },
-  { t: "Not a performance dashboard", b: "Figures appear next to the standards they measure, not in a table of their own. The point is the map with numbers on it, not the numbers with a map somewhere else." },
+  { t: "Not a performance dashboard", b: "Figures appear next to the standards they measure, not in a table of their own. A green stage badge shows influence and ambition — it isn't evidence that every standard at that stage is being met." },
   { t: "Not a locked-down document", b: "Any reader can flag a stage as 'this isn't what actually happens' — no sign-in. The people best placed to spot a wrong map are the least likely to hold an admin password." },
+];
+
+const redesign = [
+  { t: "Colour-coded journeys", b: "Property blue, rented customer green, shared ownership orange — one shared identity carried across selectors, stage paths, list views and detail." },
+  { t: "Direct linking", b: "Any journey or stage can be reached via URL (e.g. /map?journey=customer&stage=C4). Direct links reveal their target even when a saved role preference would normally filter that stage out." },
+  { t: "Explorer as the front door", b: "The home page now opens the journey explorer — three journey cards, a connected stage path and a list view. Excellence and TSM connections are visible together." },
+  { t: "BS06 flagged in coverage", b: "RSH added BS06 electrical safety checks in June 2026. The coverage page flags its absence in the library until it's added — rather than pretending the requirement doesn't exist." },
 ];
 
 export default function Page() {
@@ -66,7 +91,7 @@ export default function Page() {
 
           <div className="mt-6 flex flex-wrap items-center gap-2 text-xs">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 font-medium text-ink-700 ring-1 ring-ink-900/10">
-              <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               Prototype · Discovery
             </span>
             <span className="rounded-full bg-white px-2.5 py-1 text-ink-500 ring-1 ring-ink-900/10">Service design</span>
@@ -75,20 +100,19 @@ export default function Page() {
           </div>
 
           <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink-900 md:text-5xl">
-            Housing Journey Manager
+            Housing Journeys
           </h1>
           <p className="mt-3 text-lg text-ink-500">
-            One shared map of every journey — the service made legible,
-            answerable and challengeable.
+            Every stage. A better experience.
           </p>
 
           <p className="mt-6 max-w-3xl text-balance text-base leading-relaxed text-ink-700">
-            A full-stack journey map for a social housing provider covering
-            three journeys — <span className="font-medium text-ink-900">property</span>,{" "}
-            <span className="font-medium text-ink-900">rented customer</span> and{" "}
-            <span className="font-medium text-ink-900">shared ownership</span> — broken into stages. Each stage answers four questions,
-            names one accountable team, sits under the policies and processes it
-            touches, and carries the Tenant Satisfaction Measures it moves.
+            A shared picture of the resident experience — three colour-coded
+            journeys, 25 stages, and the excellence, processes, policies and
+            Tenant Satisfaction Measures that sit behind each one. Focused on
+            service design, not case management: an assurance layer that shows
+            how the service is meant to work, who owns each part, and which
+            measures each part moves.
           </p>
 
           <div className="mt-8 rounded-2xl border border-amber-200/60 bg-amber-50/60 p-5 text-sm text-ink-700">
@@ -96,72 +120,89 @@ export default function Page() {
             <p className="mt-1">
               A working prototype exists locally with 25 stages, 42 policies
               and 77 processes seeded from standard UK social housing practice.
-              This page is the narrative version — what it is, how it works and
-              why the shape is what it is.
+              The screenshot below is from the September 2026 redesign; the
+              text on this page is the narrative version — what it is, how it
+              works and why the shape is what it is.
             </p>
           </div>
 
-          {/* Journey map illustration */}
+          {/* Journey explorer screenshot */}
           <figure className="mt-10 overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-soft">
             <div className="flex items-center justify-between border-b border-ink-900/5 px-5 py-3 text-xs">
-              <span className="font-semibold uppercase tracking-wide text-ink-500">Journey map</span>
-              <span className="flex items-center gap-3 text-ink-500">
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" />On target</span>
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" />Watch</span>
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-red-500" />Below target</span>
-              </span>
+              <span className="font-semibold uppercase tracking-wide text-ink-500">Journey explorer</span>
+              <span className="text-ink-500">September 2026 redesign</span>
             </div>
-            <svg viewBox="0 0 900 320" className="w-full" role="img" aria-label="Illustration of three parallel journey tracks with stages and RAG statuses">
-              <defs>
-                <linearGradient id="jm-track" x1="0" x2="1">
-                  <stop offset="0%" stopColor="#F1F5F9" />
-                  <stop offset="100%" stopColor="#F8FAFC" />
-                </linearGradient>
-              </defs>
-              {/* Track labels */}
-              {[
-                { y: 60, label: "Property", sub: "acquisition → disposal" },
-                { y: 160, label: "Rented customer", sub: "application → moving on" },
-                { y: 260, label: "Shared ownership", sub: "reservation → resale" },
-              ].map((t) => (
-                <g key={t.label}>
-                  <text x="20" y={t.y - 4} fontSize="13" fontWeight="600" fill="#0B1220">{t.label}</text>
-                  <text x="20" y={t.y + 12} fontSize="11" fill="#94A3B8">{t.sub}</text>
-                </g>
-              ))}
-              {/* Tracks + stages */}
-              {[
-                { y: 60, stages: [{ n: "Acquire" }, { n: "Prep" }, { n: "Let-ready", rag: "amber" }, { n: "Occupied" }, { n: "Repairs", rag: "green" }, { n: "Planned" }, { n: "Void", rag: "red" }, { n: "Dispose" }] },
-                { y: 160, stages: [{ n: "Apply" }, { n: "Sign-up", rag: "green" }, { n: "Settle" }, { n: "Income", rag: "amber" }, { n: "ASB" }, { n: "Repairs" }, { n: "Complaints", rag: "red" }, { n: "Move on" }] },
-                { y: 260, stages: [{ n: "Reserve" }, { n: "Complete", rag: "green" }, { n: "Live-in" }, { n: "Repairs" }, { n: "Staircase", rag: "amber" }, { n: "Lease" }, { n: "Resale" }] },
-              ].map((track) => {
-                const startX = 190;
-                const endX = 870;
-                const gap = (endX - startX) / (track.stages.length - 1);
-                return (
-                  <g key={track.y}>
-                    <line x1={startX} y1={track.y} x2={endX} y2={track.y} stroke="#E2E8F0" strokeWidth="2" />
-                    {track.stages.map((s, i) => {
-                      const x = startX + gap * i;
-                      const rag = s.rag === "green" ? "#10B981" : s.rag === "amber" ? "#F59E0B" : s.rag === "red" ? "#EF4444" : null;
-                      return (
-                        <g key={s.n}>
-                          <circle cx={x} cy={track.y} r="10" fill="white" stroke="#CBD5E1" strokeWidth="1.5" />
-                          {rag && <circle cx={x} cy={track.y} r="5" fill={rag} />}
-                          <text x={x} y={track.y + 26} fontSize="11" fill="#475569" textAnchor="middle">{s.n}</text>
-                        </g>
-                      );
-                    })}
-                  </g>
-                );
-              })}
-            </svg>
+            <img
+              src="/journey-manager-explorer.png"
+              alt="Housing Journeys — journey explorer showing three colour-coded journey cards (Our homes, Our residents, Our homeowners) and the rented customer journey stages: What Matters, Helping Hand, Voice of the Customer, New Chapter, Warm Welcome."
+              className="w-full"
+              loading="lazy"
+            />
+            <figcaption className="border-t border-ink-900/5 px-5 py-3 text-xs text-ink-500">
+              Three journey selectors above a connected stage path. Excellence
+              and TSM connections are visible together on each stage card.
+            </figcaption>
           </figure>
         </div>
       </section>
 
-      {/* The four questions */}
+      {/* Three journeys */}
       <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+            Three journeys
+          </p>
+          <h2 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-ink-900">
+            One shared picture. Three points of view.
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm text-ink-500">
+            Each journey has its own colour, its own stage path and its own
+            headline framing — kept distinct where the tenure demands it.
+          </p>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {journeys.map((j) => (
+              <div
+                key={j.name}
+                className={`rounded-2xl border border-ink-900/10 p-6 shadow-soft ring-4 ${j.ring} ${j.tint}`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className={`h-2.5 w-2.5 rounded-full ${j.dot}`} />
+                  <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">
+                    {j.heading}
+                  </p>
+                </div>
+                <h3 className="mt-2 text-lg font-semibold tracking-tight text-ink-900">{j.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-700">{j.body}</p>
+                <div className="mt-5 flex items-center gap-4 border-t border-ink-900/10 pt-4 text-xs text-ink-500">
+                  <span>
+                    <span className="font-semibold text-ink-900">{j.stages}</span> stages
+                  </span>
+                  <span>
+                    <span className="font-semibold text-ink-900">{j.tsms}</span> TSM connections
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 rounded-2xl border border-ink-900/10 bg-white p-6 shadow-soft">
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink-300">
+              A note on TSMs and tenure
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-700">
+              RSH requirements cover LCRA and/or LCHO depending on the measure,
+              stock and provider — shared ownership isn&apos;t universally
+              outside the regime. The app stores a{" "}
+              <span className="font-medium text-ink-900">reportable</span>{" "}
+              flag on each mapping, treats shared ownership links as indicative
+              pending a provider-specific review, and flags the June 2026 BS06
+              addition until the library is updated.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* The four questions */}
+      <section className="relative z-10">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             The core mechanic
@@ -188,9 +229,10 @@ export default function Page() {
             {/* Stage card illustration */}
             <figure className="overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-soft">
               <div className="flex items-center justify-between border-b border-ink-900/5 px-5 py-3 text-xs">
-                <span className="font-semibold uppercase tracking-wide text-ink-500">Stage · Sign-up</span>
+                <span className="font-semibold uppercase tracking-wide text-ink-500">Stage · Warm Welcome</span>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-0.5 font-medium text-emerald-700">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />On target
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  Rented customer · C5
                 </span>
               </div>
               <div className="p-6">
@@ -200,7 +242,9 @@ export default function Page() {
                 <div className="mt-5 rounded-xl bg-slate-50 p-4">
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-brand-600">01 · Excellent service</p>
                   <p className="mt-1 text-sm leading-relaxed text-ink-700">
-                    A new tenant is signed up in a home that&apos;s ready to live in, understands their tenancy and knows who to call — in a single visit, within target.
+                    A new tenant is welcomed into a home that&apos;s ready to
+                    live in, understands their tenancy and knows who to call —
+                    in a single visit, within target.
                   </p>
                 </div>
 
@@ -227,8 +271,8 @@ export default function Page() {
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-brand-600">04 · TSMs</p>
                   <div className="mt-2 space-y-2">
                     {[
-                      { code: "TP01", n: "Overall satisfaction", v: "82.4%", t: "80%", up: true },
-                      { code: "TP06", n: "Time taken to move in", v: "9.8 days", t: "10 days", up: true },
+                      { code: "TP01", n: "Overall satisfaction", v: "82.4%", t: "80%" },
+                      { code: "TP06", n: "Time taken to move in", v: "9.8 days", t: "10 days" },
                     ].map((m) => (
                       <div key={m.code} className="flex items-center justify-between rounded-lg bg-white px-3 py-2 ring-1 ring-ink-900/10">
                         <div className="min-w-0">
@@ -255,42 +299,33 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Three journeys */}
-      <section className="relative z-10">
+      {/* September 2026 redesign */}
+      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
-            Three journeys
+            September 2026 redesign
           </p>
           <h2 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-ink-900">
-            Kept distinct where the tenure demands it.
+            What&apos;s new.
           </h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {journeys.map((j) => (
-              <div key={j.name} className="rounded-2xl border border-ink-900/10 bg-white p-6 shadow-soft">
-                <h3 className="text-base font-semibold tracking-tight text-ink-900">{j.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink-500">{j.body}</p>
+          <p className="mt-3 max-w-3xl text-sm text-ink-500">
+            The redesign focuses the tool on service design and assurance —
+            without letting it drift towards being another performance
+            dashboard.
+          </p>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {redesign.map((r) => (
+              <div key={r.t} className="rounded-2xl border border-ink-900/10 bg-white p-6 shadow-soft">
+                <h3 className="text-base font-semibold tracking-tight text-ink-900">{r.t}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-500">{r.b}</p>
               </div>
             ))}
-          </div>
-          <div className="mt-8 rounded-2xl border border-ink-900/10 bg-white p-6 shadow-soft">
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-300">
-              A note on TSMs and tenure
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-ink-700">
-              Tenant Satisfaction Measures are reported for Low Cost Rental
-              Accommodation. Shared ownership households sit outside the TSM
-              perception survey — so shared ownership stages carry TSM links as{" "}
-              <span className="font-medium text-ink-900">indicative only</span>,
-              badged as such, and excluded from the coverage report. The links
-              are kept because those stages still influence the measures; just
-              not reported against them.
-            </p>
           </div>
         </div>
       </section>
 
       {/* Role lenses */}
-      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+      <section className="relative z-10">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             Role lenses
@@ -323,11 +358,11 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Challenges */}
-      <section className="relative z-10">
+      {/* Feedback & challenges */}
+      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
-            Challenges
+            Feedback &amp; challenges
           </p>
           <h2 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-ink-900">
             The map is wrong. Say so.
@@ -344,7 +379,7 @@ export default function Page() {
       </section>
 
       {/* What it isn't */}
-      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+      <section className="relative z-10">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             Deliberate boundaries
@@ -368,7 +403,7 @@ export default function Page() {
       </section>
 
       {/* Access */}
-      <section className="relative z-10">
+      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             Access model
@@ -388,7 +423,7 @@ export default function Page() {
 
       {/* CTA */}
       <section className="relative z-10">
-        <div className="mx-auto max-w-5xl px-6 pb-20">
+        <div className="mx-auto max-w-5xl px-6 pb-20 pt-16">
           <div className="overflow-hidden rounded-3xl bg-ink-900 p-10 text-white shadow-soft md:p-12">
             <div className="grid items-center gap-8 md:grid-cols-[1.6fr_1fr]">
               <div>

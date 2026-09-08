@@ -28,15 +28,15 @@ const discovery: App[] = [
       "M3 12 12 3l9 9M5 10v10h14V10M9 20v-6h6v6",
   },
   {
-    name: "Housing Journey Manager",
-    tagline: "One shared map of every journey",
+    name: "Housing Journeys",
+    tagline: "Every stage. A better experience.",
     description:
-      "A full-stack journey map covering property, rented and shared ownership journeys — where every stage names an accountable team and answers four questions: what excellent service looks like, which processes it touches, which policies it sits under, and which TSMs it moves. An assurance layer, not a system of record.",
+      "A shared picture of the resident experience — three colour-coded journeys (our homes, our residents, our homeowners), 25 stages, and the excellence, processes, policies and Tenant Satisfaction Measures that sit behind each one. An assurance layer, not a system of record.",
     href: "/apps/journey-manager",
     external: false,
     status: "Prototype",
     tags: ["Service design", "Assurance", "TSMs"],
-    accent: "from-orange-50 to-white",
+    accent: "from-emerald-50 to-white",
     iconPath:
       "M9 20 3 22V8l6-2m0 14 6 2m-6-2V6m6 16 6-2V4l-6 2m0 14V6",
   },
