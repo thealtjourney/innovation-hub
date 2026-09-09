@@ -5,8 +5,53 @@ import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
 export const metadata: Metadata = {
   title: "Threshold — Innovation Hub",
   description:
-    "A tenancy sustainment early-warning model — interpretable by construction, built for the DPIA as well as the housing officer.",
+    "Housing foresight — early warning for social housing. One view of what could go wrong, two workspaces to do something about it.",
 };
+
+const workspaces = [
+  {
+    label: "01 · People",
+    heading: "Tenancy sustainment",
+    strap: "A stable home starts with support.",
+    body:
+      "Spot the changes that put a tenancy at risk. Understand the evidence, prioritise contact, and track whether support made a difference.",
+    features: ["Early warning", "Officer caseload", "Outcomes & assurance"],
+    tint: "bg-ink-900",
+    fg: "text-white",
+    sub: "text-white/70",
+    chip: "border-white/30 text-white",
+    tag: "bg-white/10 text-white/80",
+  },
+  {
+    label: "02 · Property",
+    heading: "Repairs intelligence",
+    strap: "Look ahead. Get there before failure.",
+    body:
+      "Find ageing components, unseen condition gaps and emerging hazards. Turn limited survey capacity into a programme of useful visits.",
+    features: ["Component outlook", "Survey programme", "Hazards & demand"],
+    tint: "bg-lime-200",
+    fg: "text-emerald-900",
+    sub: "text-emerald-900/80",
+    chip: "border-emerald-900/40 text-emerald-900",
+    tag: "bg-emerald-900/10 text-emerald-900/80",
+  },
+];
+
+const journey = [
+  { t: "Notice", b: "Signals move — arrears velocity, missed contacts, ageing components, evidence gaps. Threshold picks them up as they change, not months later." },
+  { t: "Understand", b: "Every flag arrives pre-assembled as signals → contribution → what changed. The score is the least interesting thing on the screen." },
+  { t: "Act", b: "Each flag terminates in a suggested action drawn from a defined intervention library, matched to the dominant signal cluster." },
+  { t: "Learn", b: "Rejections are training data and audit evidence simultaneously. The library gets better as officers use it." },
+];
+
+const principles = [
+  { t: "No score without a story", b: "The top three drivers appear on every list row. The full contribution breakdown is one click away — and the contributions sum to the score, on screen, always." },
+  { t: "Change, not level", b: "Early warning is a derivative problem. Every flag carries a 'Why now' line: what moved since the last run, and by how much." },
+  { t: "Model the decision, not the risk", b: "Each flag ends in a suggested action with the observed effect of that action in similar past cases — not a number with no next step." },
+  { t: "Honest uncertainty", b: "A fourth RAG state — Grey — for households the model should not judge. Confidence intervals are shown, not hidden." },
+  { t: "Right to be forgotten by design", b: "Signals expire. Arrears from 2021 do not haunt a 2026 score. Every signal has a stated decay window." },
+  { t: "Contestable and auditable", b: "Every flag has a plain-English, resident-facing version. Every action — raised, viewed, actioned, overridden, expired — is immutable and queryable." },
+];
 
 const signals = [
   {
@@ -44,31 +89,11 @@ const signals = [
   },
 ];
 
-const principles = [
-  {
-    t: "No score without a story",
-    b: "The top three drivers appear on every list row. The full contribution breakdown is one click away — and the contributions sum to the score, on screen, always.",
-  },
-  {
-    t: "Change, not level",
-    b: "Early warning is a derivative problem. Every flag carries a 'Why now' line: what moved since the last run, and by how much.",
-  },
-  {
-    t: "Model the decision, not the risk",
-    b: "Each flag terminates in a suggested action drawn from a defined intervention library, matched to the dominant signal cluster — with the observed effect of that action in similar past cases.",
-  },
-  {
-    t: "Honest uncertainty",
-    b: "A fourth RAG state — Grey — for households the model should not judge. Confidence intervals are shown, not hidden.",
-  },
-  {
-    t: "Right to be forgotten by design",
-    b: "Signals expire. Arrears from 2021 do not haunt a 2026 score. Every signal has a stated decay window.",
-  },
-  {
-    t: "Contestable and auditable",
-    b: "Every flag has a plain-English, resident-facing version generated at the same moment as the officer version. Every action — raised, viewed, actioned, overridden, expired — is immutable and queryable.",
-  },
+const repairsAngles = [
+  { t: "Component outlook", b: "Age and condition evidence rolled up per home and per component — with a clear signal when estimates are ≥30% and it's time to inspect." },
+  { t: "Survey programme", b: "Turn limited survey capacity into a programme of useful visits — homes with evidence gaps, high hazard priorities, or no recent repairs surface first." },
+  { t: "Hazards & actions", b: "HHSRS-shaped hazard priorities kept separate from component failure and cost. Review priorities aren't confirmed hazards until an officer says so." },
+  { t: "Demand forecast", b: "A 12-month planning estimate — expected responsive spend, homes with silent condition, components trending towards failure." },
 ];
 
 const bands = [
@@ -113,47 +138,167 @@ export default function Page() {
             </span>
             <span className="rounded-full bg-white px-2.5 py-1 text-ink-500 ring-1 ring-ink-900/10">Early warning</span>
             <span className="rounded-full bg-white px-2.5 py-1 text-ink-500 ring-1 ring-ink-900/10">Explainable model</span>
-            <span className="rounded-full bg-white px-2.5 py-1 text-ink-500 ring-1 ring-ink-900/10">Tenancy sustainment</span>
+            <span className="rounded-full bg-white px-2.5 py-1 text-ink-500 ring-1 ring-ink-900/10">Tenancy + repairs</span>
           </div>
 
-          <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-ink-900 md:text-5xl">
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+            Housing foresight
+          </p>
+          <h1 className="mt-2 text-balance text-4xl font-semibold tracking-tight text-ink-900 md:text-5xl">
             Threshold
           </h1>
           <p className="mt-3 text-lg text-ink-500">
-            Predicting tenancy failure early — with an explanation an officer
-            can argue with and a DPO can sign off.
+            See failure early. Keep homes and lives on track.
           </p>
 
           <p className="mt-6 max-w-3xl text-balance text-base leading-relaxed text-ink-700">
-            Threshold is an early-warning view of households at risk of losing
-            their tenancy, built from data social housing organisations already
-            hold. It flags cases early enough to do something about them — and
-            shows exactly why they were flagged, so the score is never the
-            product. The <em>explanation</em> is.
+            One view of what could go wrong. Two workspaces to do something
+            about it. Threshold turns tenancy and repairs signals — data
+            housing providers already hold — into earlier, better decisions,
+            with explanations an officer can argue with and a DPO can sign
+            off.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="/threshold.html"
-              className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-5 py-2.5 text-sm font-medium text-white shadow-soft transition hover:bg-ink-700"
-            >
-              Open the prototype
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 17 17 7M8 7h9v9" />
-              </svg>
-            </a>
-            <a
-              href="#signals"
-              className="inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white px-5 py-2.5 text-sm font-medium text-ink-700 shadow-soft transition hover:border-ink-900/20"
-            >
-              See the signal model
-            </a>
+          {/* Landing hero screenshot */}
+          <figure className="mt-10 overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-soft">
+            <div className="flex items-center justify-between border-b border-ink-900/5 px-5 py-3 text-xs">
+              <span className="font-semibold uppercase tracking-wide text-ink-500">Landing · Housing foresight</span>
+              <span className="text-ink-500">Notice → Understand → Act → Learn</span>
+            </div>
+            <img
+              src="/threshold-landing.png"
+              alt="Threshold landing page: 'See failure early. Keep homes and lives on track.' with a four-step journey — Notice, Understand, Act, Learn — running along the bottom."
+              className="w-full"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </section>
+
+      {/* Two workspaces */}
+      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+            Two lenses. One purpose.
+          </p>
+          <h2 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-ink-900">
+            Protect the tenancy. Look after the home.
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm text-ink-500">
+            The people who live in a home and the fabric of the home itself
+            fail differently — but the signals are held in the same
+            organisation. Threshold gives each its own workspace, and one
+            shared foresight approach behind them.
+          </p>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {workspaces.map((w) => (
+              <div key={w.heading} className={`rounded-2xl p-7 shadow-soft ${w.tint} ${w.fg}`}>
+                <div className="flex items-start justify-between">
+                  <p className={`text-xs font-semibold uppercase tracking-wide ${w.sub}`}>{w.label}</p>
+                  <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${w.chip}`}>
+                    {w.heading}
+                  </span>
+                </div>
+                <p className="mt-6 text-2xl font-semibold tracking-tight md:text-3xl">
+                  {w.strap}
+                </p>
+                <p className={`mt-3 text-sm leading-relaxed ${w.sub}`}>{w.body}</p>
+                <div className="mt-6 flex flex-wrap gap-1.5">
+                  {w.features.map((f) => (
+                    <span key={f} className={`rounded-full px-2.5 py-1 text-xs font-medium ${w.tag}`}>{f}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
+
+          <figure className="mt-10 overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-soft">
+            <div className="flex items-center justify-between border-b border-ink-900/5 px-5 py-3 text-xs">
+              <span className="font-semibold uppercase tracking-wide text-ink-500">Choose your workspace</span>
+              <span className="text-ink-500">People · Property</span>
+            </div>
+            <img
+              src="/threshold-workspaces.png"
+              alt="Threshold's 'Where would you like to start?' screen — two cards side by side: People (Tenancy sustainment) in dark navy, and Property (Repairs intelligence) in lime green."
+              className="w-full"
+              loading="lazy"
+            />
+          </figure>
+        </div>
+      </section>
+
+      {/* Foresight, with follow-through */}
+      <section className="relative z-10">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+            Foresight, with follow-through
+          </p>
+          <h2 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-ink-900">
+            Notice. Understand. Act. Learn.
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm text-ink-500">
+            The four steps show up across both workspaces — the same shape of
+            work, whether the signal is a household or a component.
+          </p>
+          <ol className="mt-8 grid gap-4 md:grid-cols-4">
+            {journey.map((s, i) => (
+              <li key={s.t} className="rounded-2xl border border-ink-900/10 bg-white p-5 shadow-soft">
+                <span className="text-xs font-semibold text-ink-300">0{i + 1}</span>
+                <h3 className="mt-2 text-base font-semibold tracking-tight text-ink-900">{s.t}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-500">{s.b}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* Repairs intelligence */}
+      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
+            Repairs intelligence workspace
+          </p>
+          <h2 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-ink-900">
+            A clearer picture. An earlier response.
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm text-ink-500">
+            A useful starting point for a conversation, not a diagnosis — and
+            the principle behind every screen:{" "}
+            <span className="font-medium text-ink-900">silence is not evidence of good condition</span>.
+          </p>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {repairsAngles.map((a) => (
+              <div key={a.t} className="rounded-2xl border border-ink-900/10 bg-white p-6 shadow-soft">
+                <h3 className="text-base font-semibold tracking-tight text-ink-900">{a.t}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-500">{a.b}</p>
+              </div>
+            ))}
+          </div>
+
+          <figure className="mt-10 overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-soft">
+            <div className="flex items-center justify-between border-b border-ink-900/5 px-5 py-3 text-xs">
+              <span className="font-semibold uppercase tracking-wide text-ink-500">Repairs intelligence · Overview</span>
+              <span className="text-ink-500">Synthetic demonstration</span>
+            </div>
+            <img
+              src="/threshold-repairs-dashboard.png"
+              alt="Threshold repairs intelligence workspace: overview dashboard showing 240 homes, 66 condition evidence gaps, 43 high hazard priorities, 49 open review actions, a stacked bar showing 43 prioritise / 94 review condition / 103 routine monitoring, and a 12-month forecast panel."
+              className="w-full"
+              loading="lazy"
+            />
+            <figcaption className="border-t border-ink-900/5 px-5 py-3 text-xs text-ink-500">
+              Figures shown are synthetic demonstration data on a 240-home
+              estate. Real deployments use provider data, on provider
+              infrastructure.
+            </figcaption>
+          </figure>
         </div>
       </section>
 
       {/* Why interpretability */}
-      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+      <section className="relative z-10">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             Why interpretability is the architecture
@@ -195,7 +340,7 @@ export default function Page() {
       </section>
 
       {/* Bands */}
-      <section className="relative z-10">
+      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             RAG bands
@@ -226,10 +371,10 @@ export default function Page() {
       </section>
 
       {/* Signal model */}
-      <section id="signals" className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
+      <section id="signals" className="relative z-10">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
-            Signal model
+            Tenancy signal model
           </p>
           <h2 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight text-ink-900">
             Signals tiered by intrusiveness.
@@ -272,7 +417,7 @@ export default function Page() {
       </section>
 
       {/* Interventions */}
-      <section className="relative z-10">
+      <section className="relative z-10 border-t border-ink-900/5 bg-slate-50/60">
         <div className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-600">
             Intervention library
@@ -310,36 +455,36 @@ export default function Page() {
 
       {/* CTA */}
       <section className="relative z-10">
-        <div className="mx-auto max-w-5xl px-6 pb-20 pt-4">
+        <div className="mx-auto max-w-5xl px-6 pb-20 pt-16">
           <div className="overflow-hidden rounded-3xl bg-ink-900 p-10 text-white shadow-soft md:p-12">
             <div className="grid items-center gap-8 md:grid-cols-[1.6fr_1fr]">
               <div>
                 <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-                  See it running.
+                  Want to see it running?
                 </h2>
                 <p className="mt-4 max-w-xl text-ink-300">
-                  The prototype is a self-contained page showing the dashboard,
-                  a household deep-dive with contribution breakdown, and the
-                  intervention flow. Built on ~85 synthetic tenancies, but the
-                  arithmetic and screens are the real thing.
+                  Threshold runs locally on synthetic estate data — 240 homes
+                  and ~85 tenancies — so the screens show the real arithmetic,
+                  the real explanations and the real interventions. Get in
+                  touch for a walkthrough of either workspace, or both.
                 </p>
               </div>
               <div className="flex flex-col gap-3 md:items-end">
-                <a
-                  href="/threshold.html"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-ink-900 transition hover:bg-slate-100"
-                >
-                  Open the prototype
-                  <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M7 17 17 7M8 7h9v9" />
-                  </svg>
-                </a>
                 <Link
                   href="/#contact"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-ink-900 transition hover:bg-slate-100"
+                >
+                  Get in touch
+                  <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </Link>
+                <a
+                  href="/threshold.html"
                   className="text-xs text-ink-300 underline-offset-2 hover:text-white hover:underline"
                 >
-                  Or get in touch to walk through it
-                </Link>
+                  Or open the interactive prototype (earlier design)
+                </a>
               </div>
             </div>
           </div>

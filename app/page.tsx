@@ -42,13 +42,13 @@ const discovery: App[] = [
   },
   {
     name: "Threshold",
-    tagline: "Tenancy sustainment early-warning model",
+    tagline: "Housing foresight — tenancy & repairs early warning",
     description:
-      "An interpretable-by-construction early-warning view of households at risk of losing their tenancy — built from data housing providers already hold. The score is never the product; the explanation is, so a DPO can sign it off and an officer can argue with it.",
+      "One view of what could go wrong. Two workspaces to do something about it — a people workspace for tenancy sustainment, and a property workspace for repairs intelligence. Interpretable by construction, so a DPO can sign it off and an officer can argue with it.",
     href: "/apps/threshold",
     external: false,
     status: "Prototype",
-    tags: ["Early warning", "Explainable model", "Tenancy sustainment"],
+    tags: ["Early warning", "Explainable model", "Tenancy + repairs"],
     accent: "from-slate-50 to-white",
     iconPath:
       "M3 12h4l3-8 4 16 3-8h4",
