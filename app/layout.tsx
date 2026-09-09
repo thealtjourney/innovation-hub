@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Innovation Hub — Social Housing ICT Portfolio",
+  title: "Innovation Hub — A Home for Better Ideas",
   description:
-    "A portfolio of digital products advancing innovation in social housing — from operational tools to digital twin platforms.",
+    "Explore ideas, applications and experiments for better social housing. Step inside the house to discover tools for residents, homes and communities.",
   openGraph: {
     title: "Innovation Hub",
     description:
-      "A portfolio of digital products advancing innovation in social housing.",
+      "A working collection of ideas for better homes, stronger communities and thoughtful digital services.",
     type: "website",
   },
 };
@@ -24,7 +24,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://rsms.me/" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
-      <body>{children}</body>
+      <body>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

@@ -36,7 +36,7 @@ const architecture = [
 
 export default function Page() {
   return (
-    <main className="relative min-h-screen">
+    <main id="main-content" className="project-brief relative min-h-screen">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[480px] grid-bg" />
       <SiteHeader />
 

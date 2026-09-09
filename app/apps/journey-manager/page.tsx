@@ -73,14 +73,14 @@ const redesign = [
 
 export default function Page() {
   return (
-    <main className="relative min-h-screen">
+    <main id="main-content" className="project-brief relative min-h-screen">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[480px] grid-bg" />
       <SiteHeader />
 
       <section className="relative z-10">
         <div className="mx-auto max-w-5xl px-6 pb-12 pt-12 md:pt-16">
           <Link
-            href="/#discovery"
+            href="/#projects"
             className="inline-flex items-center gap-1.5 text-sm text-ink-500 hover:text-ink-900"
           >
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
