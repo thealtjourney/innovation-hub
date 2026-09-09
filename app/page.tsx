@@ -32,9 +32,9 @@ const discovery: App[] = [
     tagline: "Every stage. A better experience.",
     description:
       "A shared picture of the resident experience — three colour-coded journeys (our homes, our residents, our homeowners), 25 stages, and the excellence, processes, policies and Tenant Satisfaction Measures that sit behind each one. An assurance layer, not a system of record.",
-    href: "/apps/journey-manager",
-    external: false,
-    status: "Prototype",
+    href: "https://jm-five-murex.vercel.app/",
+    external: true,
+    status: "Beta",
     tags: ["Service design", "Assurance", "TSMs"],
     accent: "from-emerald-50 to-white",
     iconPath:
